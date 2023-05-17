@@ -12,7 +12,7 @@ android {
                 def outputMetadataFile = file("release/output-metadata.json")
                 def gson = new GsonBuilder().setPrettyPrinting().create()
                 def outputMetadataJson = gson.fromJson(outputMetadataFile.text, Object)
-                outputMetadataJson.url = "url"
+                outputMetadataJson.url = "https://raw.githubusercontent.com/Vanderclin/MobileTv/main/app/release/app-release.apk"
                 def outputMetadataJsonString = gson.toJson(outputMetadataJson)
                 outputMetadataFile.write(outputMetadataJsonString)
             }

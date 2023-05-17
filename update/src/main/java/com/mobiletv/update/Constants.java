@@ -7,7 +7,7 @@ class Constants {
     static final int TYPE_NOTIFICATION = 2;
     static final int TYPE_DIALOG = 1;
     static final String TAG = "UpdateChecker";
-    static final String UPDATE_URL = "https://app.pixreward.ml/assets/update/MobileTV/update.json";
+    static final String UPDATE_URL = "https://raw.githubusercontent.com/Vanderclin/MobileTv/main/app/release/output-metadata.json";
     // Variantes adicionais
     static final String ARTIFACT_TYPE = "artifactType";
     static final String APPLICATION_ID = "applicationId";
