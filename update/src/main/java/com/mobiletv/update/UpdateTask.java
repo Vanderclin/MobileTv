@@ -16,7 +16,7 @@ class UpdateTask extends AsyncTask<Void, Void, String> {
     private Context mContext;
     private int mType;
     private boolean mShowProgressDialog;
-    private static final String json = Constants.UPDATE_JSON;
+    private static final String url = Constants.UPDATE_URL;
 
     UpdateTask(Context context, int type, boolean showProgressDialog) {
 
@@ -52,9 +52,9 @@ class UpdateTask extends AsyncTask<Void, Void, String> {
         try {
 
             JSONObject obj = new JSONObject(result);
-            String updateMessage = obj.getString(Constants.UPDATE_MESSAGE);
-            String apkUrl = obj.getString(Constants.UPDATE_URL);
-            int apkCode = obj.getInt(Constants.UPDATE_CODE);
+            String updateMessage = obj.getString(Constants.APK_UPDATE_CONTENT);
+            String apkUrl = obj.getString(Constants.APK_DOWNLOAD_URL);
+            int apkCode = obj.getInt(Constants.APK_VERSION_CODE);
 
             int versionCode = UtilsApp.getVersionCode(mContext);
 
@@ -69,7 +69,7 @@ class UpdateTask extends AsyncTask<Void, Void, String> {
             }
 
         } catch (JSONException e) {
-            Log.e(Constants.UPDATE_TAG, "parse json error");
+            Log.e(Constants.TAG, "parse json error");
         }
     }
 
@@ -84,6 +84,6 @@ class UpdateTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... args) {
-        return HttpUtils.get(json);
+        return HttpUtils.get(url);
     }
 }

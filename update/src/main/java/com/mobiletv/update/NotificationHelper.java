@@ -13,13 +13,18 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 public class NotificationHelper extends ContextWrapper {
+
     private NotificationManager manager;
+
     private static String CHANNEL_ID = "app_update";
+
     private static final int NOTIFICATION_ID = 0;
 
     public NotificationHelper(Context base) {
         super(base);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.new_update), NotificationManager.IMPORTANCE_HIGH);
             mChannel.setDescription(getString(R.string.the_application_has_a_new_version));
             mChannel.enableLights(true);
@@ -31,9 +36,12 @@ public class NotificationHelper extends ContextWrapper {
 
         Intent myIntent = new Intent(this, DownloadService.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        myIntent.putExtra(Constants.UPDATE_URL, apkUrl);
+        myIntent.putExtra(Constants.APK_DOWNLOAD_URL, apkUrl);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = getNofity(content).setContentIntent(pendingIntent);
+
+        NotificationCompat.Builder builder = getNofity(content)
+			.setContentIntent(pendingIntent);
+
         getManager().notify(NOTIFICATION_ID, builder.build());
     }
 
@@ -47,14 +55,21 @@ public class NotificationHelper extends ContextWrapper {
 
 
         NotificationCompat.Builder builder = getNofity(text)
-                .setProgress(100, progress, false)
-                .setContentIntent(pendingintent);
+			.setProgress(100, progress, false)
+			.setContentIntent(pendingintent);
 
         getManager().notify(NOTIFICATION_ID, builder.build());
     }
 
     private NotificationCompat.Builder getNofity(String text) {
-        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID).setTicker(getString(R.string.new_update)).setContentTitle(getString(R.string.new_update)).setContentText(text).setSmallIcon(getSmallIcon()).setLargeIcon(getLargeIcon()).setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+			.setTicker(getString(R.string.new_update))
+			.setContentTitle(getString(R.string.new_update))
+			.setContentText(text)
+			.setSmallIcon(getSmallIcon())
+			.setLargeIcon(getLargeIcon())
+			.setAutoCancel(true)
+			.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
     }
 

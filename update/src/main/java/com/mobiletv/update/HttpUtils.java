@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HttpUtils {
+
+
     public static String get(String urlStr) {
         HttpURLConnection uRLConnection = null;
         InputStream is = null;
@@ -29,7 +31,7 @@ public class HttpUtils {
             }
             result = strBuilder.toString();
         } catch (Exception e) {
-            Log.e(Constants.UPDATE_TAG, "http  error");
+            Log.e(Constants.TAG, "http  error");
         } finally {
             if (buffer != null) {
                 try {

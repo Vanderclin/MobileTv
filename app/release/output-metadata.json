@@ -16,6 +16,5 @@
       "outputFile": "app-release.apk"
     }
   ],
-  "elementType": "File",
-  "url": "https://raw.githubusercontent.com/Vanderclin/MobileTv/main/app/release/app-release.apk"
+  "elementType": "File"
 }

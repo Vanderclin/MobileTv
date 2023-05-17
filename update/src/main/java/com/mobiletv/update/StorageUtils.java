@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.File;
 
 final class StorageUtils {
+
     public static File getCacheDirectory(Context context) {
         File appCacheDir = context.getCacheDir();
         if (appCacheDir == null) {

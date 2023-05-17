@@ -1,5 +1,4 @@
 import com.google.gson.GsonBuilder
-
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
@@ -9,10 +8,14 @@ android {
     afterEvaluate {
         task addCustomKeyToOutputMetadataJson() {
             doLast {
-                def outputMetadataFile = file("release/output-metadata.json")
+                def outputMetadataFile = file("release/update.json")
                 def gson = new GsonBuilder().setPrettyPrinting().create()
-                def outputMetadataJson = gson.fromJson(outputMetadataFile.text, Object)
-                outputMetadataJson.url = "https://raw.githubusercontent.com/Vanderclin/MobileTv/main/app/release/app-release.apk"
+                def outputMetadataJson = [
+                        description: "* Correções adicionais",
+                        code       : 2,
+                        url        : "https://raw.githubusercontent.com/Vanderclin/MobileTv/main/app/release/app-release.apk",
+                        version    : "1.0"
+                ]
                 def outputMetadataJsonString = gson.toJson(outputMetadataJson)
                 outputMetadataFile.write(outputMetadataJsonString)
             }
