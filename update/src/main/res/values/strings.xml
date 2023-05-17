@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="new_update">Nova atualização</string>
+	<string name="the_application_has_a_new_version">O aplicativo tem uma nova versão</string>
+
+    <string name="download">Baixar</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="last_installed_version">Última versão instalada</string>
+
+    <string name="downloading">Baixando: %1$d%%</string>
+
+    <string name="checking_the_version">Verificando a versão</string>
+
+
+</resources>

@@ -1,0 +1,36 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="80dp"
+    android:layout_height="120dp"
+    android:orientation="vertical"
+    app:cardUseCompatPadding="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/episode_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_placeholder_cards" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/episode_title"
+            style="@style/FontSubhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/color_translucent"
+            android:ellipsize="marquee"
+            android:gravity="center|start"
+            android:hint="@string/loading"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:padding="@dimen/padding_small"
+            android:scrollHorizontally="true"
+            android:singleLine="true" />
+
+    </FrameLayout>
+
+</com.google.android.material.card.MaterialCardView>

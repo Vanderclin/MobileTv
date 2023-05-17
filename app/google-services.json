@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "904241190418",
+    "project_id": "mobiletv-android",
+    "storage_bucket": "mobiletv-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904241190418:android:b901297ba7894995d3eacb",
+        "android_client_info": {
+          "package_name": "com.mobiletv.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904241190418-75r3mruq1106cmcqhqi29jkuocdjsvp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXejKU6ZyH3NCrn45qRuHIT8Pecqc0JAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904241190418-75r3mruq1106cmcqhqi29jkuocdjsvp2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

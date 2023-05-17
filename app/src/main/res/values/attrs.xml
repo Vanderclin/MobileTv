@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MediaController">
+        <attr name="scalable" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="VideoView">
+        <attr name="fitXY" format="boolean" />
+        <attr name="autoRotation" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MaterialEditText">
+        <attr name="isDescription" format="boolean" />
+        <attr name="inputType">
+            <enum name="none" value="-1" />
+            <enum name="text" value="1" />
+            <enum name="textCapCharacters" value="8193" />
+            <enum name="textCapWords" value="8194" />
+            <enum name="textCapSentences" value="16385" />
+            <enum name="textAutoCorrect" value="32769" />
+            <enum name="textAutoComplete" value="65537" />
+            <enum name="textMultiLine" value="131073" />
+            <enum name="textImeMultiLine" value="262145" />
+            <enum name="textNoSuggestions" value="524289" />
+            <enum name="textUri" value="17" />
+            <enum name="textEmailAddress" value="33" />
+            <enum name="textEmailSubject" value="49" />
+            <enum name="textShortMessage" value="97" />
+            <enum name="textLongMessage" value="113" />
+            <enum name="textPersonName" value="97" />
+            <enum name="textPostalAddress" value="113" />
+            <enum name="textPassword" value="129" />
+            <enum name="textVisiblePassword" value="145" />
+            <enum name="textWebEditText" value="161" />
+            <enum name="textFilter" value="177" />
+            <enum name="textPhonetic" value="193" />
+            <enum name="textWebEmailAddress" value="209" />
+            <enum name="textWebPassword" value="225" />
+            <enum name="number" value="2" />
+            <enum name="numberSigned" value="4098" />
+            <enum name="numberDecimal" value="8194" />
+            <enum name="phone" value="3" />
+            <enum name="datetime" value="4" />
+            <enum name="date" value="20" />
+            <enum name="time" value="36" />
+        </attr>
+
+    </declare-styleable>
+
+
+</resources>
