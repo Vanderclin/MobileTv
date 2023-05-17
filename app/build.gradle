@@ -1,9 +1,45 @@
+import com.google.gson.GsonBuilder
+
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
 }
 
 android {
+    afterEvaluate {
+        task addCustomKeyToOutputMetadataJson() {
+            doLast {
+                def outputMetadataFile = file("release/output-metadata.json")
+                def gson = new GsonBuilder().setPrettyPrinting().create()
+                def outputMetadataJson = gson.fromJson(outputMetadataFile.text, Object)
+                outputMetadataJson.url = "url"
+                def outputMetadataJsonString = gson.toJson(outputMetadataJson)
+                outputMetadataFile.write(outputMetadataJsonString)
+            }
+        }
+        assembleDebug.finalizedBy(addCustomKeyToOutputMetadataJson)
+        assembleRelease.finalizedBy(addCustomKeyToOutputMetadataJson)
+    }
+    bundle {
+        storeArchive {
+            enable = true
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('D:\\AndroidStudioProjects\\JKS\\MobileTv.jks')
+            storePassword '@MobileTV#23'
+            keyAlias 'MobileTV'
+            keyPassword '@MobileTV#23'
+        }
+        debug {
+            storeFile file('D:\\AndroidStudioProjects\\JKS\\MobileTv.jks')
+            storePassword '@MobileTV#23'
+            keyAlias 'MobileTV'
+            keyPassword '@MobileTV#23'
+        }
+    }
     namespace 'com.mobiletv.app'
     compileSdk 33
 
@@ -13,13 +49,22 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
             minifyEnabled false
+            shrinkResources false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
