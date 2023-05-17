@@ -38,7 +38,7 @@ public class UtilsPackage {
 
 
     private static Uri getApkUri(File apkFile) {
-        Log.d(Constants.TAG, apkFile.toString());
+        Log.d(Constants.UPDATE_TAG, apkFile.toString());
         try {
             String[] command = {"chmod", "777", apkFile.toString()};
             ProcessBuilder builder = new ProcessBuilder(command);
@@ -46,7 +46,7 @@ public class UtilsPackage {
         } catch (IOException ignored) {
         }
         Uri uri = Uri.fromFile(apkFile);
-        Log.d(Constants.TAG, uri.toString());
+        Log.d(Constants.UPDATE_TAG, uri.toString());
         return uri;
     }
 

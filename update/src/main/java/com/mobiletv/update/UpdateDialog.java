@@ -35,7 +35,7 @@ class UpdateDialog {
 
     private static void goToDownload(Context context, String downloadUrl) {
         Intent intent = new Intent(context.getApplicationContext(), DownloadService.class);
-        intent.putExtra(Constants.APK_DOWNLOAD_URL, downloadUrl);
+        intent.putExtra(Constants.UPDATE_URL, downloadUrl);
         context.startService(intent);
     }
 }

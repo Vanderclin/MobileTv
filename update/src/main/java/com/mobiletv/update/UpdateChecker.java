@@ -9,7 +9,7 @@ public class UpdateChecker {
         if (context != null) {
             new UpdateTask(context, Constants.TYPE_DIALOG, true).execute();
         } else {
-            Log.e(Constants.TAG, "The arg context is null");
+            Log.e(Constants.UPDATE_TAG, "The arg context is null");
         }
     }
 
@@ -18,7 +18,7 @@ public class UpdateChecker {
         if (context != null) {
             new UpdateTask(context, Constants.TYPE_NOTIFICATION, false).execute();
         } else {
-            Log.e(Constants.TAG, "The arg context is null");
+            Log.e(Constants.UPDATE_TAG, "The arg context is null");
         }
 
     }

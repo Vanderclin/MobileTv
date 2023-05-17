@@ -23,8 +23,8 @@ public class DownloadService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        NotificationHelper notificationHelper =  new NotificationHelper(this);
-        String urlStr = intent.getStringExtra(Constants.APK_DOWNLOAD_URL);
+        NotificationHelper notificationHelper = new NotificationHelper(this);
+        String urlStr = intent.getStringExtra(Constants.UPDATE_URL);
         InputStream in = null;
         FileOutputStream out = null;
         try {

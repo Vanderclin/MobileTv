@@ -29,7 +29,7 @@ public class HttpUtils {
             }
             result = strBuilder.toString();
         } catch (Exception e) {
-            Log.e(Constants.TAG, "http  error");
+            Log.e(Constants.UPDATE_TAG, "http  error");
         } finally {
             if (buffer != null) {
                 try {
