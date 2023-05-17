@@ -23,7 +23,6 @@ public class DownloadService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        NotificationHelper notificationHelper =  new NotificationHelper(this);
         String urlStr = intent.getStringExtra(Constants.APK_DOWNLOAD_URL);
         InputStream in = null;
         FileOutputStream out = null;
@@ -58,15 +57,11 @@ public class DownloadService extends IntentService {
 
                 int progress = (int) (bytesum * 100L / bytetotal);
                 if (progress != oldProgress) {
-                    notificationHelper.updateProgress(progress);
+
                 }
                 oldProgress = progress;
             }
-
             UtilsPackage.installAPk(this, apkFile);
-
-            notificationHelper.cancel();
-
         } catch (Exception e) {
             Log.e(TAG, "download apk file error:" + e.getMessage());
         } finally {

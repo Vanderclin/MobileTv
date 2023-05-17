@@ -59,9 +59,7 @@ class UpdateTask extends AsyncTask<Void, Void, String> {
             int versionCode = UtilsApp.getVersionCode(mContext);
 
             if (apkCode > versionCode) {
-                if (mType == Constants.TYPE_NOTIFICATION) {
-                    new NotificationHelper(mContext).showNotification(updateMessage, apkUrl);
-                } else if (mType == Constants.TYPE_DIALOG) {
+                if (mType == Constants.TYPE_DIALOG) {
                     showDialog(mContext, updateMessage, apkUrl);
                 }
             } else if (mShowProgressDialog) {

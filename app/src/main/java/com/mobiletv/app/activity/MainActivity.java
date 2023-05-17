@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             UpdateChecker.checkForDialog(MainActivity.this);
-            UpdateChecker.checkForNotification(MainActivity.this);
         }
     }
 }

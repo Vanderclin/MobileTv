@@ -12,16 +12,5 @@ public class UpdateChecker {
             Log.e(Constants.TAG, "The arg context is null");
         }
     }
-
-
-    public static void checkForNotification(Context context) {
-        if (context != null) {
-            new UpdateTask(context, Constants.TYPE_NOTIFICATION, false).execute();
-        } else {
-            Log.e(Constants.TAG, "The arg context is null");
-        }
-
-    }
-
-
+    
 }
