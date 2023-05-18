@@ -46,8 +46,18 @@
             <enum name="date" value="20" />
             <enum name="time" value="36" />
         </attr>
-
     </declare-styleable>
 
+
+    <declare-styleable name="Badge">
+        <attr name="badge_background" format="color" />
+        <attr name="badge_corner_radius" format="dimension" />
+        <attr name="badge_stroke_color" format="color" />
+        <attr name="badge_stroke_width" format="dimension" />
+        <attr name="badge_text" format="string" />
+        <attr name="badge_text_bold" format="boolean" />
+        <attr name="badge_text_color" format="integer" />
+        <attr name="badge_text_color_hint" format="integer" />
+    </declare-styleable>
 
 </resources>

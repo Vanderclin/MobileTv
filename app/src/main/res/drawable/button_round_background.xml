@@ -3,6 +3,7 @@
     <item android:state_pressed="true">
         <inset android:inset="5dp">
             <shape android:shape="oval">
+                <padding android:bottom="@dimen/padding_small" android:left="@dimen/padding_small" android:right="@dimen/padding_small" android:top="@dimen/padding_small" />
                 <solid android:color="#80000000" />
             </shape>
         </inset>
@@ -11,6 +12,7 @@
     <item android:state_pressed="false">
         <inset android:inset="5dp">
             <shape android:shape="oval">
+                <padding android:bottom="@dimen/padding_small" android:left="@dimen/padding_small" android:right="@dimen/padding_small" android:top="@dimen/padding_small" />
                 <solid android:color="#40000000" />
             </shape>
         </inset>

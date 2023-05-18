@@ -12,4 +12,10 @@
     <dimen name="padding_large">16dp</dimen>
 
     <dimen name="description_min_height">90dp</dimen>
+
+    <dimen name="grid_spacing">8dp</dimen>
+    <dimen name="grid_padding">16dp</dimen>
+
+    <dimen name="badge_padding">8dp</dimen>
+    <dimen name="badge_content_margin">8dp</dimen>
 </resources>

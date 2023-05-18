@@ -9,11 +9,17 @@
         <item
             android:id="@+id/navigation_b"
             android:icon="@drawable/icon_films_and_series"
-            android:title="@string/action" />
+            android:title="@string/series" />
 
         <item
             android:id="@+id/navigation_c"
+            android:icon="@drawable/icon_star"
+            android:title="@string/earn_points" />
+
+        <item
+            android:id="@+id/navigation_d"
             android:icon="@drawable/icon_config"
-            android:title="@string/configuration" />
+            android:title="@string/configuration"
+            android:visible="false" />
     </group>
 </menu>

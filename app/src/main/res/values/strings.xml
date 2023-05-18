@@ -37,8 +37,14 @@
     <string name="admin_permissions_required">You need admin permissions.</string>
     <string name="configuration">Configuration</string>
     <string name="fill_required_fields">Please fill in all the required fields.</string>
+    <string name="insufficient_points">Insufficient points</string>
 
     <string name="username">Username</string>
     <string name="update">Update</string>
     <string name="not_now">Not Now</string>
+    <string name="zero">0</string>
+    <string name="series">Series</string>
+    <string name="earn_points">Earn Points</string>
+    <string name="waita_moment">Wait a moment</string>
+
 </resources>

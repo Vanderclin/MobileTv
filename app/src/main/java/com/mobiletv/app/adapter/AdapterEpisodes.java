@@ -34,9 +34,8 @@ public class AdapterEpisodes extends RecyclerView.Adapter<AdapterEpisodes.Episod
 
     @Override
     public void onBindViewHolder(@NonNull EpisodeViewHolder mHolder, int position) {
-        ;
         EpisodeDetails episode = episodes.get(position);
-        Glide.with(mHolder.itemView.getContext()).load(episode.getCover()).placeholder(R.drawable.ic_launcher_background).into(mHolder.episodeCover);
+        Glide.with(mHolder.itemView.getContext()).load(episode.getCover()).placeholder(R.drawable.icon_placeholder_cards).into(mHolder.episodeCover);
         mHolder.episodeTitle.setText(episode.getTitle());
         mHolder.itemView.setOnClickListener(view -> {
             Uri address = Uri.parse(episode.getAddress());

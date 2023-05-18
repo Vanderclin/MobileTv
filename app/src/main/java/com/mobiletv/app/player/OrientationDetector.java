@@ -8,27 +8,23 @@ import android.view.OrientationEventListener;
 
 import com.mobiletv.app.BuildConfig;
 
-
 public class OrientationDetector {
 
     private static final String TAG = "OrientationDetector";
     private static final int HOLDING_THRESHOLD = 1500;
-    private Context context;
-    private OrientationEventListener orientationEventListener;
 
+    private final Context context;
+    private OrientationEventListener orientationEventListener;
     private int rotationThreshold = 20;
     private long holdingTime = 0;
     private long lastCalcTime = 0;
     private Direction lastDirection = Direction.PORTRAIT;
-
     private int currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-
     private OrientationChangeListener listener;
 
     public OrientationDetector(Context context) {
         this.context = context;
     }
-
 
     public void setOrientationChangeListener(OrientationChangeListener listener) {
         this.listener = listener;
@@ -53,47 +49,15 @@ public class OrientationDetector {
                     } else {
                         calcHoldingTime();
                         if (holdingTime > HOLDING_THRESHOLD) {
-                            if (currDirection == Direction.LANDSCAPE) {
-                                if (currentOrientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                                    Log.d(TAG, "switch to SCREEN_ORIENTATION_LANDSCAPE");
-                                    currentOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                                    if (listener != null) {
-                                        listener.onOrientationChanged(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, currDirection);
-                                    }
+                            int newScreenOrientation = getScreenOrientation(currDirection);
+                            if (newScreenOrientation != currentOrientation) {
+                                currentOrientation = newScreenOrientation;
+                                if (listener != null) {
+                                    listener.onOrientationChanged(newScreenOrientation, currDirection);
                                 }
-
-                            } else if (currDirection == Direction.PORTRAIT) {
-                                if (currentOrientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                                    Log.d(TAG, "switch to SCREEN_ORIENTATION_PORTRAIT");
-                                    currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                                    if (listener != null) {
-                                        listener.onOrientationChanged(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, currDirection);
-                                    }
-                                }
-
-                            } else if (currDirection == Direction.REVERSE_PORTRAIT) {
-                                if (currentOrientation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
-                                    Log.d(TAG, "switch to SCREEN_ORIENTATION_REVERSE_PORTRAIT");
-                                    currentOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-                                    if (listener != null) {
-                                        listener.onOrientationChanged(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT, currDirection);
-                                    }
-                                }
-
-                            } else if (currDirection == Direction.REVERSE_LANDSCAPE) {
-                                if (currentOrientation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-                                    Log.d(TAG, "switch to SCREEN_ORIENTATION_REVERSE_LANDSCAPE");
-                                    currentOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-                                    if (listener != null) {
-                                        listener.onOrientationChanged(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE, currDirection);
-                                    }
-                                }
-
                             }
-
                         }
                     }
-
                 }
             };
         }
@@ -107,7 +71,6 @@ public class OrientationDetector {
             lastCalcTime = current;
         }
         holdingTime += current - lastCalcTime;
-        // Log.d(TAG, "calcHoldingTime holdingTime=" + holdingTime);
         lastCalcTime = current;
     }
 
@@ -116,8 +79,7 @@ public class OrientationDetector {
     }
 
     private Direction calcDirection(int orientation) {
-        if (orientation <= rotationThreshold
-                || orientation >= 360 - rotationThreshold) {
+        if (orientation <= rotationThreshold || orientation >= 360 - rotationThreshold) {
             return Direction.PORTRAIT;
         } else if (Math.abs(orientation - 180) <= rotationThreshold) {
             return Direction.REVERSE_PORTRAIT;
@@ -129,6 +91,20 @@ public class OrientationDetector {
         return null;
     }
 
+    private int getScreenOrientation(Direction direction) {
+        switch (direction) {
+            case PORTRAIT:
+                return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            case REVERSE_PORTRAIT:
+                return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+            case LANDSCAPE:
+                return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            case REVERSE_LANDSCAPE:
+                return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+            default:
+                return currentOrientation;
+        }
+    }
 
     public void setInitialDirection(Direction direction) {
         lastDirection = direction;
@@ -148,9 +124,7 @@ public class OrientationDetector {
         void onOrientationChanged(int screenOrientation, Direction direction);
     }
 
-
     public enum Direction {
         PORTRAIT, REVERSE_PORTRAIT, LANDSCAPE, REVERSE_LANDSCAPE
     }
-
 }

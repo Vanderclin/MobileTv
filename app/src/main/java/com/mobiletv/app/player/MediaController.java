@@ -1,5 +1,6 @@
 package com.mobiletv.app.player;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -23,26 +24,18 @@ import java.util.Formatter;
 import java.util.Locale;
 
 public class MediaController extends FrameLayout {
-
-
-    private MediaPlayerControl mPlayer;
-
     private Context mContext;
-
+    private MediaPlayerControl mPlayer;
     private ProgressBar mProgress;
-
-    private TextView mEndTime, mCurrentTime;
-
+    private TextView mEndTime;
+    private TextView mCurrentTime;
     private TextView mTitle;
-
     private boolean mShowing = true;
-
     private boolean mDragging;
-
     private boolean mScalable = false;
     private boolean mIsFullScreen = false;
+    private boolean handled = false;
     private static final int sDefaultTimeout = 3000;
-
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private static final int SHOW_LOADING = 3;
@@ -51,10 +44,8 @@ public class MediaController extends FrameLayout {
     private static final int HIDE_ERROR = 6;
     private static final int SHOW_COMPLETE = 7;
     private static final int HIDE_COMPLETE = 8;
-    StringBuilder mFormatBuilder;
-
-    Formatter mFormatter;
-
+    private StringBuilder mFormatBuilder;
+    private Formatter mFormatter;
     private ImageButton mTurnButton;
     private ImageButton mScaleButton;
     private View mBackButton;
@@ -62,7 +53,6 @@ public class MediaController extends FrameLayout {
     private ViewGroup errorLayout;
     private View mTitleLayout;
     private View mControlLayout;
-
     private View mCenterPlayButton;
 
     public MediaController(Context context, AttributeSet attrs) {
@@ -82,11 +72,10 @@ public class MediaController extends FrameLayout {
     private void init(Context context) {
         mContext = context;
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View viewRoot = inflater.inflate(R.layout.layout_controller, this);
+        View viewRoot = inflater.inflate(R.layout.player_controller, this);
         viewRoot.setOnTouchListener(mTouchListener);
         initControllerView(viewRoot);
     }
-
 
     private void initControllerView(View v) {
         mTitleLayout = v.findViewById(R.id.title_part);
@@ -103,15 +92,11 @@ public class MediaController extends FrameLayout {
             mTurnButton.setOnClickListener(mPauseListener);
         }
 
-        if (mScalable) {
-            if (mScaleButton != null) {
-                mScaleButton.setVisibility(VISIBLE);
-                mScaleButton.setOnClickListener(mScaleListener);
-            }
-        } else {
-            if (mScaleButton != null) {
-                mScaleButton.setVisibility(GONE);
-            }
+        if (mScalable && mScaleButton != null) {
+            mScaleButton.setVisibility(VISIBLE);
+            mScaleButton.setOnClickListener(mScaleListener);
+        } else if (mScaleButton != null) {
+            mScaleButton.setVisibility(GONE);
         }
 
         if (mCenterPlayButton != null) {
@@ -124,13 +109,11 @@ public class MediaController extends FrameLayout {
 
         View bar = v.findViewById(R.id.seekbar);
         mProgress = (ProgressBar) bar;
-        if (mProgress != null) {
-            if (mProgress instanceof SeekBar) {
-                SeekBar seeker = (SeekBar) mProgress;
-                seeker.setOnSeekBarChangeListener(mSeekListener);
-            }
-            mProgress.setMax(1000);
+        if (mProgress instanceof SeekBar) {
+            SeekBar seeker = (SeekBar) mProgress;
+            seeker.setOnSeekBarChangeListener(mSeekListener);
         }
+        mProgress.setMax(1000);
 
         mEndTime = v.findViewById(R.id.duration);
         mCurrentTime = v.findViewById(R.id.has_played);
@@ -138,7 +121,7 @@ public class MediaController extends FrameLayout {
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
     }
-
+    // OK
 
     public void setMediaPlayer(MediaPlayerControl player) {
         mPlayer = player;
@@ -155,7 +138,7 @@ public class MediaController extends FrameLayout {
                 mTurnButton.setEnabled(false);
             }
         } catch (IncompatibleClassChangeError ex) {
-
+            // Tratamento de exceção vazio
         }
     }
 
@@ -171,15 +154,9 @@ public class MediaController extends FrameLayout {
         updatePausePlay();
         updateBackButton();
 
-        if (getVisibility() != VISIBLE) {
-            setVisibility(VISIBLE);
-        }
-        if (mTitleLayout.getVisibility() != VISIBLE) {
-            mTitleLayout.setVisibility(VISIBLE);
-        }
-        if (mControlLayout.getVisibility() != VISIBLE) {
-            mControlLayout.setVisibility(VISIBLE);
-        }
+        setVisibility(VISIBLE);
+        mTitleLayout.setVisibility(VISIBLE);
+        mControlLayout.setVisibility(VISIBLE);
 
         mHandler.sendEmptyMessage(SHOW_PROGRESS);
 
@@ -194,7 +171,6 @@ public class MediaController extends FrameLayout {
         return mShowing;
     }
 
-
     public void hide() {
         if (mShowing) {
             mHandler.removeMessages(SHOW_PROGRESS);
@@ -204,8 +180,9 @@ public class MediaController extends FrameLayout {
         }
     }
 
-
-    private Handler mHandler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private final Handler mHandler = new Handler() {
+        @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(Message msg) {
             int pos;
@@ -242,52 +219,29 @@ public class MediaController extends FrameLayout {
     };
 
     private void showCenterView(int resId) {
-        if (resId == R.id.loading_layout) {
-            if (loadingLayout.getVisibility() != VISIBLE) {
+        switch (resId) {
+            case R.id.loading_layout:
                 loadingLayout.setVisibility(VISIBLE);
-            }
-            if (mCenterPlayButton.getVisibility() == VISIBLE) {
                 mCenterPlayButton.setVisibility(GONE);
-            }
-            if (errorLayout.getVisibility() == VISIBLE) {
                 errorLayout.setVisibility(GONE);
-            }
-        } else if (resId == R.id.center_play_btn) {
-            if (mCenterPlayButton.getVisibility() != VISIBLE) {
+                break;
+            case R.id.center_play_btn:
                 mCenterPlayButton.setVisibility(VISIBLE);
-            }
-            if (loadingLayout.getVisibility() == VISIBLE) {
                 loadingLayout.setVisibility(GONE);
-            }
-            if (errorLayout.getVisibility() == VISIBLE) {
                 errorLayout.setVisibility(GONE);
-            }
-
-        } else if (resId == R.id.error_layout) {
-            if (errorLayout.getVisibility() != VISIBLE) {
+                break;
+            case R.id.error_layout:
                 errorLayout.setVisibility(VISIBLE);
-            }
-            if (mCenterPlayButton.getVisibility() == VISIBLE) {
                 mCenterPlayButton.setVisibility(GONE);
-            }
-            if (loadingLayout.getVisibility() == VISIBLE) {
                 loadingLayout.setVisibility(GONE);
-            }
-
+                break;
         }
     }
 
-
     private void hideCenterView() {
-        if (mCenterPlayButton.getVisibility() == VISIBLE) {
-            mCenterPlayButton.setVisibility(GONE);
-        }
-        if (errorLayout.getVisibility() == VISIBLE) {
-            errorLayout.setVisibility(GONE);
-        }
-        if (loadingLayout.getVisibility() == VISIBLE) {
-            loadingLayout.setVisibility(GONE);
-        }
+        mCenterPlayButton.setVisibility(GONE);
+        errorLayout.setVisibility(GONE);
+        loadingLayout.setVisibility(GONE);
     }
 
     public void reset() {
@@ -295,13 +249,12 @@ public class MediaController extends FrameLayout {
         mEndTime.setText("00:00");
         mProgress.setProgress(0);
         mTurnButton.setImageResource(R.drawable.ic_play);
-        setVisibility(View.VISIBLE);
+        setVisibility(VISIBLE);
         hideLoading();
     }
 
     private String stringForTime(int timeMs) {
         int totalSeconds = timeMs / 1000;
-
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
@@ -329,10 +282,8 @@ public class MediaController extends FrameLayout {
             mProgress.setSecondaryProgress(percent * 10);
         }
 
-        if (mEndTime != null)
-            mEndTime.setText(stringForTime(duration));
-        if (mCurrentTime != null)
-            mCurrentTime.setText(stringForTime(position));
+        if (mEndTime != null) mEndTime.setText(stringForTime(duration));
+        if (mCurrentTime != null) mCurrentTime.setText(stringForTime(position));
 
         return position;
     }
@@ -359,7 +310,6 @@ public class MediaController extends FrameLayout {
         return true;
     }
 
-    boolean handled = false;
     private OnTouchListener mTouchListener = new OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -378,15 +328,14 @@ public class MediaController extends FrameLayout {
         show(sDefaultTimeout);
         return false;
     }
+    // OK
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int keyCode = event.getKeyCode();
-        final boolean uniqueDown = event.getRepeatCount() == 0
-                && event.getAction() == KeyEvent.ACTION_DOWN;
-        if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK
-                || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
-                || keyCode == KeyEvent.KEYCODE_SPACE) {
+        final boolean uniqueDown = event.getRepeatCount() == 0 && event.getAction() == KeyEvent.ACTION_DOWN;
+
+        if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || keyCode == KeyEvent.KEYCODE_SPACE) {
             if (uniqueDown) {
                 doPauseResume();
                 show(sDefaultTimeout);
@@ -402,18 +351,14 @@ public class MediaController extends FrameLayout {
                 show(sDefaultTimeout);
             }
             return true;
-        } else if (keyCode == KeyEvent.KEYCODE_MEDIA_STOP
-                || keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE) {
+        } else if (keyCode == KeyEvent.KEYCODE_MEDIA_STOP || keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE) {
             if (uniqueDown && mPlayer.isPlaying()) {
                 mPlayer.pause();
                 updatePausePlay();
                 show(sDefaultTimeout);
             }
             return true;
-        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
-                || keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                || keyCode == KeyEvent.KEYCODE_VOLUME_MUTE
-                || keyCode == KeyEvent.KEYCODE_CAMERA) {
+        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_MUTE || keyCode == KeyEvent.KEYCODE_CAMERA) {
             return super.dispatchKeyEvent(event);
         } else if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU) {
             if (uniqueDown) {
@@ -454,9 +399,9 @@ public class MediaController extends FrameLayout {
                 updateBackButton();
                 mPlayer.setFullscreen(false);
             }
-
         }
     };
+    // OK
 
     private OnClickListener mCenterPlayListener = new OnClickListener() {
         public void onClick(View v) {
@@ -466,21 +411,13 @@ public class MediaController extends FrameLayout {
     };
 
     private void updatePausePlay() {
-        if (mPlayer != null && mPlayer.isPlaying()) {
-            mTurnButton.setImageResource(R.drawable.ic_pause);
-            // mCenterPlayButton.setVisibility(GONE);
-        } else {
-            mTurnButton.setImageResource(R.drawable.ic_play);
-            // mCenterPlayButton.setVisibility(VISIBLE);
-        }
+        int playIcon = mPlayer != null && mPlayer.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play;
+        mTurnButton.setImageResource(playIcon);
     }
 
     void updateScaleButton() {
-        if (mIsFullScreen) {
-            mScaleButton.setImageResource(R.drawable.ic_fullscreen_close);
-        } else {
-            mScaleButton.setImageResource(R.drawable.ic_fullscreen_open);
-        }
+        int scaleIcon = mIsFullScreen ? R.drawable.ic_fullscreen_close : R.drawable.ic_fullscreen_open;
+        mScaleButton.setImageResource(scaleIcon);
     }
 
     void toggleButtons(boolean isFullScreen) {
@@ -505,11 +442,11 @@ public class MediaController extends FrameLayout {
         }
         updatePausePlay();
     }
+    // OK
 
 
     private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
         int newPosition = 0;
-
         boolean change = false;
 
         public void onStartTrackingTouch(SeekBar bar) {
@@ -517,7 +454,6 @@ public class MediaController extends FrameLayout {
                 return;
             }
             show(3600000);
-
             mDragging = true;
             mHandler.removeMessages(SHOW_PROGRESS);
         }
@@ -526,7 +462,6 @@ public class MediaController extends FrameLayout {
             if (mPlayer == null || !fromuser) {
                 return;
             }
-
             long duration = mPlayer.getDuration();
             long newposition = (duration * progress) / 1000L;
             newPosition = (int) newposition;
@@ -554,7 +489,6 @@ public class MediaController extends FrameLayout {
 
     @Override
     public void setEnabled(boolean enabled) {
-        // super.setEnabled(enabled);
         if (mTurnButton != null) {
             mTurnButton.setEnabled(enabled);
         }
@@ -566,6 +500,7 @@ public class MediaController extends FrameLayout {
         }
         mBackButton.setEnabled(true);
     }
+    // OK
 
     public void showLoading() {
         mHandler.sendEmptyMessage(SHOW_LOADING);
@@ -591,15 +526,13 @@ public class MediaController extends FrameLayout {
         mHandler.sendEmptyMessage(HIDE_COMPLETE);
     }
 
-    public void setTitle(String titile) {
-        mTitle.setText(titile);
+    public void setTitle(String title) {
+        mTitle.setText(title);
     }
 
-//    public void setFullscreenEnabled(boolean enabled) {
-//        mFullscreenEnabled = enabled;
-//        mScaleButton.setVisibility(mIsFullScreen ? VISIBLE : GONE);
-//    }
-
+    public void setFullscreenEnabled(boolean enabled) {
+        mScaleButton.setVisibility(mIsFullScreen ? View.VISIBLE : View.GONE);
+    }
 
     public void setOnErrorView(int resId) {
         errorLayout.removeAllViews();
@@ -654,4 +587,5 @@ public class MediaController extends FrameLayout {
 
         void setFullscreen(boolean fullscreen, int screenOrientation);
     }
+
 }

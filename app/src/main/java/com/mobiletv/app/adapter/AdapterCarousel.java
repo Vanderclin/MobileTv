@@ -61,11 +61,9 @@ public class AdapterCarousel extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = inflater.inflate(R.layout.item_carousel, container, false);
-
         AppCompatImageView carouselImage = view.findViewById(R.id.card_pager_image);
         AppCompatTextView carouselTitle = view.findViewById(R.id.card_pager_title);
         AppCompatTextView carouselDescription = view.findViewById(R.id.card_pager_desc);
-        MaterialButton carouselGoTo = view.findViewById(R.id.card_pager_button_go_to);
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(carouselImage, "scaleX", 1.0f, 1.5f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(carouselImage, "scaleY", 1.0f, 1.5f);
@@ -89,15 +87,9 @@ public class AdapterCarousel extends PagerAdapter {
         carouselTitle.setText(title);
         carouselDescription.setText(description);
         carouselDescription.setSelected(true);
-
-        carouselGoTo.setOnClickListener(view1 -> {
-            if (!address.equals("")) {
-                mContext.startActivity(new Intent(mContext, AlternativePlayer.class).putExtra("position", address));
-            }
-        });
-
         container.addView(view);
         return view;
 
     }
+
 }

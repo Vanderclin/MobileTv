@@ -16,67 +16,35 @@
             android:scaleType="centerCrop"
             android:src="@drawable/icon_placeholder_carousel" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/background_carousel"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/card_pager_title"
+                style="@style/FontTitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@drawable/background_carousel"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_small">
+                android:gravity="center|start"
+                android:hint="@string/loading" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.0"
-                    android:gravity="center|start"
-                    android:orientation="vertical"
-                    android:paddingStart="@dimen/padding_small"
-                    android:paddingEnd="@dimen/padding_small">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/card_pager_desc"
+                style="@style/FontSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:gravity="center|start"
+                android:hint="@string/loading"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/card_pager_title"
-                        style="@style/FontTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|start"
-                        android:hint="@string/loading" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/card_pager_desc"
-                        style="@style/FontSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="marquee"
-                        android:gravity="center|start"
-                        android:hint="@string/loading"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:scrollHorizontally="true"
-                        android:singleLine="true" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/card_pager_button_go_to"
-                        style="@style/MaterialButtonOutlined"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="@string/see_more" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </FrameLayout>
 

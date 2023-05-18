@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="titles">
+        <item>Bem-vindo(a) ao MobileTv Points</item>
+        <item>Como o MobileTv Points funciona?</item>
+        <item>Quantos pontos são obtidos por anúncio?</item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item>O MobileTv Points oferece uma maneira conveniente de acumular pontos para desfrutar de suas séries favoritas.</item>
+        <item>Ao assistir anúncios dentro do aplicativo, você acumula pontos. Quanto mais anúncios você assistir, mais pontos ganhará.</item>
+        <item>Cada anúncio visualizado rende 10 pontos ao usuário.</item>
+    </string-array>
+
+    <string-array name="images">
+        <item>https://www.vocenaneve.com.br/app/uploads/2021/10/Iqaluit-aurora-boreal.jpg</item>
+        <item>https://www.vocenaneve.com.br/app/uploads/2021/09/laponia.jpg</item>
+        <item>https://www.vocenaneve.com.br/app/uploads/2021/10/rovaniemi2.jpg</item>
+    </string-array>
+</resources>

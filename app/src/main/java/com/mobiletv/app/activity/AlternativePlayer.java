@@ -1,6 +1,5 @@
 package com.mobiletv.app.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -26,11 +25,11 @@ import com.mobiletv.app.player.MediaController;
 import com.mobiletv.app.player.VideoView;
 import com.mobiletv.app.pojo.EpisodeDetails;
 import com.mobiletv.app.pojo.SeriesDetails;
+import com.mobiletv.app.widget.Badge;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class AlternativePlayer extends AppCompatActivity implements VideoView.VideoViewCallback, AdapterEpisodes.OnEpisodeClickListener {
 
@@ -43,13 +42,14 @@ public class AlternativePlayer extends AppCompatActivity implements VideoView.Vi
     private int cachedHeight;
     private boolean isFullscreen;
     private AppCompatTextView playerTitle, playerDescription;
+    private Badge playerViews;
     private RecyclerView playerEpisodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alternative_player);
-        String position = getIntent().getExtras().getString("position");
+        String position = getIntent().getStringExtra("key");
         initializeFirebase(position);
     }
 
@@ -57,17 +57,18 @@ public class AlternativePlayer extends AppCompatActivity implements VideoView.Vi
         mAuth = FirebaseAuth.getInstance();
         mData = FirebaseDatabase.getInstance().getReference();
         if (mAuth != null) {
-            initializeFindView();
+            initializeViews();
             initializePlayer(position);
         }
     }
 
-    private void initializeFindView() {
+    private void initializeViews() {
         mVideoLayout = findViewById(R.id.video_layout);
         mVideoView = findViewById(R.id.videoView);
         mMediaController = findViewById(R.id.media_controller);
         mBottomLayout = findViewById(R.id.bottom_layout);
         playerTitle = findViewById(R.id.player_content_title);
+        playerViews = findViewById(R.id.player_content_views);
         playerEpisodes = findViewById(R.id.player_content_episodes);
         playerDescription = findViewById(R.id.player_content_description);
         mVideoView.setMediaController(mMediaController);
@@ -83,10 +84,10 @@ public class AlternativePlayer extends AppCompatActivity implements VideoView.Vi
                         SeriesDetails seriesDetails = snapshot.getValue(SeriesDetails.class);
                         if (seriesDetails != null) {
                             playerTitle.setText(seriesDetails.getTitle());
+                            playerViews.setText(String.valueOf(seriesDetails.getViews()));
                             playerDescription.setText(seriesDetails.getDescription());
                             playerEpisodes.setLayoutManager(new LinearLayoutManager(AlternativePlayer.this, LinearLayoutManager.HORIZONTAL, false));
-                            Map<String, EpisodeDetails> episodesMap = seriesDetails.getEpisodes();
-                            List<EpisodeDetails> episodes = new ArrayList<>(episodesMap.values());
+                            List<EpisodeDetails> episodes = new ArrayList<>(seriesDetails.getEpisodes().values());
                             Collections.sort(episodes, (episodeA, episodeB) -> episodeA.getTitle().compareTo(episodeB.getTitle()));
                             AdapterEpisodes adapterEpisodes = new AdapterEpisodes(episodes, AlternativePlayer.this);
                             playerEpisodes.setAdapter(adapterEpisodes);
@@ -96,7 +97,7 @@ public class AlternativePlayer extends AppCompatActivity implements VideoView.Vi
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Error Here
+                    // Handle error
                 }
             });
         } else {
@@ -114,7 +115,6 @@ public class AlternativePlayer extends AppCompatActivity implements VideoView.Vi
     }
 
     @Override
-    @SuppressLint("SourceLockedOrientationActivity")
     public void onScaleChange(boolean isFullscreen) {
         this.isFullscreen = isFullscreen;
         View decorView = getWindow().getDecorView();
@@ -129,32 +129,30 @@ public class AlternativePlayer extends AppCompatActivity implements VideoView.Vi
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             ViewGroup.LayoutParams layoutParams = mVideoLayout.getLayoutParams();
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            layoutParams.height = this.cachedHeight;
+            layoutParams.height = cachedHeight;
             mVideoLayout.setLayoutParams(layoutParams);
             mBottomLayout.setVisibility(View.VISIBLE);
         }
     }
 
-
     @Override
     public void onPause(MediaPlayer mediaPlayer) {
-
+        // Handle onPause event
     }
-
 
     @Override
     public void onStart(MediaPlayer mediaPlayer) {
-
+        // Handle onStart event
     }
 
     @Override
     public void onBufferingStart(MediaPlayer mediaPlayer) {
-
+        // Handle onBufferingStart event
     }
 
     @Override
     public void onBufferingEnd(MediaPlayer mediaPlayer) {
-
+        // Handle onBufferingEnd event
     }
 
     @Override
@@ -181,5 +179,4 @@ public class AlternativePlayer extends AppCompatActivity implements VideoView.Vi
             mVideoView.start();
         }
     }
-
 }

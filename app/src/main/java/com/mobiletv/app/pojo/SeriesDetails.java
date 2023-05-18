@@ -5,10 +5,12 @@ import com.google.firebase.database.PropertyName;
 import java.util.Map;
 
 public class SeriesDetails {
+
     private String cover;
     private Map<String, EpisodeDetails> episodes;
     private String description;
     private String title;
+    private int views;
 
 
     public SeriesDetails() {
@@ -54,4 +56,10 @@ public class SeriesDetails {
     public void setEpisodes(Map<String, EpisodeDetails> episodes) {
         this.episodes = episodes;
     }
+
+    @PropertyName("views")
+    public int getViews() { return views; }
+
+    @PropertyName("views")
+    public void setViews(int views) { this.views = views; }
 }
