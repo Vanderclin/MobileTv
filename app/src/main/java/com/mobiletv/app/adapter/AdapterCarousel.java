@@ -3,23 +3,29 @@ package com.mobiletv.app.adapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.viewpager.widget.PagerAdapter;
 
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.button.MaterialButton;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.mobiletv.app.R;
-import com.mobiletv.app.activity.AlternativePlayer;
 import com.mobiletv.app.pojo.Carousel;
 import com.mobiletv.app.widget.CarouselView;
 
@@ -62,6 +68,7 @@ public class AdapterCarousel extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = inflater.inflate(R.layout.item_carousel, container, false);
         AppCompatImageView carouselImage = view.findViewById(R.id.card_pager_image);
+        AppCompatImageView carouselCover = view.findViewById(R.id.card_pager_cover);
         AppCompatTextView carouselTitle = view.findViewById(R.id.card_pager_title);
         AppCompatTextView carouselDescription = view.findViewById(R.id.card_pager_desc);
 
@@ -83,13 +90,41 @@ public class AdapterCarousel extends PagerAdapter {
         String key = carouselList.get(position).getKey();
         String title = carouselList.get(position).getTitle();
 
-        Glide.with(mContext).load(image).placeholder(R.drawable.icon_placeholder_carousel).into(carouselImage);
+        Glide.with(mContext).asBitmap().load(image).placeholder(R.drawable.icon_placeholder_carousel).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                Bitmap blurredBitmap = applyBlur(resource, 15);
+                carouselImage.setImageBitmap(blurredBitmap);
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+                // Empty Implementation
+            }
+        });
+        Glide.with(mContext).load(image).placeholder(R.drawable.icon_placeholder_carousel).into(carouselCover);
+
         carouselTitle.setText(title);
+        carouselTitle.setSelected(true);
         carouselDescription.setText(description);
         carouselDescription.setSelected(true);
         container.addView(view);
         return view;
 
+    }
+
+    private Bitmap applyBlur(Bitmap image, int radius) {
+        Bitmap blurredBitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+        RenderScript rs = RenderScript.create(mContext);
+        Allocation input = Allocation.createFromBitmap(rs, image);
+        Allocation output = Allocation.createFromBitmap(rs, blurredBitmap);
+        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        script.setRadius(radius);
+        script.setInput(input);
+        script.forEach(output);
+        output.copyTo(blurredBitmap);
+        rs.destroy();
+        return blurredBitmap;
     }
 
 }

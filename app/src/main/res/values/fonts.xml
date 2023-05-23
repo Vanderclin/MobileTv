@@ -4,21 +4,21 @@
     <style name="FontTitle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/font_color</item>
         <item name="android:textColorHint">@color/font_hint</item>
-        <item name="fontFamily">@font/cuprum</item>
+        <item name="fontFamily">@font/garet_book</item>
         <item name="textAllCaps">false</item>
     </style>
 
     <style name="FontSubhead" parent="TextAppearance.AppCompat.Subhead">
         <item name="android:textColor">@color/font_color</item>
         <item name="android:textColorHint">@color/font_hint</item>
-        <item name="fontFamily">@font/cuprum</item>
+        <item name="fontFamily">@font/garet_book</item>
         <item name="textAllCaps">false</item>
     </style>
 
     <style name="FontSmall" parent="TextAppearance.AppCompat.Small">
         <item name="android:textColor">@color/font_color</item>
         <item name="android:textColorHint">@color/font_hint</item>
-        <item name="fontFamily">@font/cuprum</item>
+        <item name="fontFamily">@font/garet_book</item>
         <item name="textAllCaps">false</item>
     </style>
 

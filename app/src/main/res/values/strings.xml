@@ -1,50 +1,62 @@
 <resources>
     <string name="app_name">MobileTv</string>
-    <string name="error">Error</string>
-    <string name="loading">Loading</string>
-    <string name="title">Title</string>
-    <string name="sign_in">Sign In</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="enter_your_email">Enter your email</string>
-    <string name="enter_your_password">Enter your password</string>
-    <string name="description">Description</string>
+    <string name="error">Erro</string>
+    <string name="loading">Carregando</string>
+    <string name="title">Título</string>
+    <string name="sign_in">Entrar</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="enter_your_email">Digite seu e-mail</string>
+    <string name="enter_your_password">Digite sua senha</string>
+    <string name="description">Descrição</string>
     <string name="time">00:00</string>
     <string name="time_view">%02d:%02d:%02d</string>
-    <string name="logoff">Log Off</string>
-    <string name="do_you_really_want_to_end_your_session">Do you really want to end your session?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="open_drawer" translatable="false">Open Drawer</string>
-    <string name="close_drawer" translatable="false">Close Drawer</string>
-    <string name="unknown">Unknown</string>
-    <string name="hint_title">[ %1$d ] Title</string>
+    <string name="logoff">Sair</string>
+    <string name="do_you_really_want_to_end_your_session">Deseja realmente encerrar a sessão?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="open_drawer" translatable="false">Abrir Menu</string>
+    <string name="close_drawer" translatable="false">Fechar Menu</string>
+    <string name="unknown">Desconhecido</string>
+    <string name="hint_title">[ %1$d ] Título</string>
     <string name="hint_address">[ %1$d ] M3U8</string>
-    <string name="home">Home</string>
-    <string name="action">Action</string>
-    <string name="see_more">See More</string>
-    <string name="to_add">Add</string>
-    <string name="to_remove">Remove</string>
-    <string name="episode">Episode %1$d</string>
-    <string name="form">Form</string>
-    <string name="todo">TODO</string>
+    <string name="home">Início</string>
+    <string name="action">Ação</string>
+    <string name="see_more">Ver Mais</string>
+    <string name="to_add">Adicionar</string>
+    <string name="to_remove">Remover</string>
+    <string name="episode">Episódio %1$d</string>
+    <string name="form">Formulário</string>
+    <string name="todo">A fazer</string>
     <!-- Toasts -->
-    <string name="error_upload_episode_image">Error uploading episode image.</string>
-    <string name="error_upload_cover_image">Error uploading cover image.</string>
-    <string name="added_successfully">Added successfully!</string>
-    <string name="gallery_permission_denied">Permission denied to access the gallery.</string>
-    <string name="add_to_news">Add to News</string>
-    <string name="admin_permissions_required">You need admin permissions.</string>
-    <string name="configuration">Configuration</string>
-    <string name="fill_required_fields">Please fill in all the required fields.</string>
-    <string name="insufficient_points">Insufficient points</string>
+    <string name="error_upload_episode_image">Erro ao enviar imagem do episódio.</string>
+    <string name="error_upload_cover_image">Erro ao enviar imagem de capa.</string>
+    <string name="added_successfully">Adicionado com sucesso!</string>
+    <string name="gallery_permission_denied">Permissão negada para acessar a galeria.</string>
+    <string name="add_to_news">Adicionar às Notícias</string>
+    <string name="admin_permissions_required">Você precisa de permissões de administrador.</string>
+    <string name="configuration">Configuração</string>
+    <string name="fill_required_fields">Por favor, preencha todos os campos obrigatórios.</string>
+    <string name="insufficient_points">Pontos insuficientes</string>
 
-    <string name="username">Username</string>
-    <string name="update">Update</string>
-    <string name="not_now">Not Now</string>
+    <string name="username">Nome de usuário</string>
+    <string name="update">Atualizar</string>
+    <string name="not_now">Agora não</string>
     <string name="zero">0</string>
-    <string name="series">Series</string>
-    <string name="earn_points">Earn Points</string>
-    <string name="waita_moment">Wait a moment</string>
+    <string name="series">Séries</string>
+    <string name="earn_points">Ganhar Pontos</string>
+    <string name="wait_a_moment">Aguarde um momento</string>
+
+    <string name="new_update">Nova atualização</string>
+    <string name="the_application_has_a_new_version">O aplicativo tem uma nova versão</string>
+    <string name="download">Baixar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="last_installed_version">Última versão instalada</string>
+    <string name="downloading">Baixando: %1$d%%</string>
+    <string name="checking_the_version">Verificando a versão</string>
+
+
+    <string name="confirmation_debit_message">Após a confirmação, serão debitados 10 pontos da sua conta para que você possa ter acesso ao conteúdo.</string>
+
 
 </resources>

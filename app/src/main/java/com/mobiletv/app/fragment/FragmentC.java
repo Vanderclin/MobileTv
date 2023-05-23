@@ -96,22 +96,17 @@ public class FragmentC extends Fragment {
             }
         }, 1000, 20000);
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isPermission) {
-                    initializeUnityRewards();
-                    isPermission = false;
-                } else {
-                    Toast.makeText(requireActivity(), getString(R.string.waita_moment), Toast.LENGTH_SHORT).show();
-                }
+        floatingActionButton.setOnClickListener(v -> {
+            if (isPermission) {
+                initializeUnityRewards();
+                isPermission = false;
+            } else {
+                Toast.makeText(requireActivity(), getString(R.string.wait_a_moment), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-
-    // ADS UNITY
     private void initializeUnity() {
         UnityAds.initialize(requireActivity(), UNITY_GAME_ID, UNITY_TEST_MODE, new IUnityAdsInitializationListener() {
             @Override

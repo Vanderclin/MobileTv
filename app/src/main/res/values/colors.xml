@@ -17,6 +17,7 @@
     <color name="color_warning">#FFC107</color>
     <color name="color_info">#0dcaf0</color>
     <color name="color_light">#f8f9fa</color>
+    <color name="color_night">#000000</color>
     <color name="color_light_hint">#6c757d</color>
 
     <color name="color_muted">#212529</color>

@@ -36,7 +36,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.mobiletv.app.R;
-import com.mobiletv.app.activity.AlternativePlayer;
+import com.mobiletv.app.player.AdvancedPlayer;
 import com.mobiletv.app.pojo.Account;
 import com.mobiletv.app.pojo.Series;
 import com.mobiletv.app.widget.ImageRounded;
@@ -156,6 +156,8 @@ public class FragmentB extends Fragment {
         MaterialButton dialogDismiss = rootView.findViewById(R.id.dialog_watch_dismiss);
         MaterialButton dialogAction = rootView.findViewById(R.id.dialog_watch_action);
 
+        dialogTitle.setSelected(true);
+
         if (cover != null && description != null && title != null) {
             Glide.with(requireActivity()).load(cover).placeholder(R.drawable.icon_placeholder_cards).into(dialogImage);
             dialogTitle.setText(title);
@@ -168,7 +170,7 @@ public class FragmentB extends Fragment {
                 if (mAccount.getPoints() > 0) {
                     mData.child("users").child(uid).child("points").setValue(ServerValue.increment(-10));
                     mData.child("series").child(key).child("views").setValue(ServerValue.increment(1));
-                    startActivity(new Intent(requireActivity(), AlternativePlayer.class).putExtra("key", key));
+                    startActivity(new Intent(requireActivity(), AdvancedPlayer.class).putExtra("key", key));
                     mDialog.dismiss();
                 } else {
                     Toast.makeText(requireActivity(), getString(R.string.insufficient_points), Toast.LENGTH_SHORT).show();

@@ -33,7 +33,6 @@
         <item name="colorControlActivated">@color/color_light</item>
     </style>
 
-
     <style name="MaterialButtonOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_marginStart">4dp</item>
         <item name="android:layout_marginEnd">4dp</item>
@@ -44,6 +43,11 @@
         <item name="textAllCaps">false</item>
     </style>
 
+    <style name="MaterialProgressDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:progressDrawable">@drawable/material_progress_dialog</item>
+        <item name="android:textColorPrimary">@color/color_light</item>
+    </style>
 
     <style name="MaterialDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:textColorPrimary">@color/theme_color_components</item>

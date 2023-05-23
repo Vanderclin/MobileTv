@@ -7,7 +7,6 @@
 
 
     <declare-styleable name="VideoView">
-        <attr name="fitXY" format="boolean" />
         <attr name="autoRotation" format="boolean" />
     </declare-styleable>
 

@@ -30,8 +30,13 @@
                     style="@style/FontTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:gravity="center|start"
                     android:hint="@string/loading"
-                    android:padding="@dimen/padding_small" />
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:padding="@dimen/padding_small"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -45,7 +50,7 @@
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/dialog_watch_description"
-                            style="@style/FontSmall"
+                            style="@style/FontSubhead"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/loading"
@@ -58,6 +63,16 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/FontSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_small"
+            android:paddingTop="@dimen/padding_medium"
+            android:paddingEnd="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_medium"
+            android:text="@string/confirmation_debit_message" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

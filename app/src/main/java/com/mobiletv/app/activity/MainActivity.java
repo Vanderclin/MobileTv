@@ -3,6 +3,7 @@ package com.mobiletv.app.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -40,7 +41,11 @@ import com.mobiletv.app.fragment.FragmentC;
 import com.mobiletv.app.pojo.Account;
 import com.mobiletv.app.widget.Badge;
 import com.mobiletv.app.widget.MaterialEditText;
-import com.mobiletv.update.UpdateChecker;
+import com.mobiletv.app.update.UpdateChecker;
+import com.unity3d.ads.IUnityAdsInitializationListener;
+import com.unity3d.ads.IUnityAdsLoadListener;
+import com.unity3d.ads.IUnityAdsShowListener;
+import com.unity3d.ads.UnityAds;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -59,12 +64,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         initializeConnection();
         initializeFindViews();
+        initializeUnity();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         initializeFirebase();
+        if (UnityAds.isInitialized()) {
+            initializeInterstitial();
+        }
     }
 
     private void initializeFindViews() {
@@ -77,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
         View navigationViewHeader = mNavigationView.getHeaderView(0);
         NavHeaderName = navigationViewHeader.findViewById(R.id.nav_header_name);
+        NavHeaderName.setSelected(true);
         NavHeaderPoints = navigationViewHeader.findViewById(R.id.nav_header_points);
         mNavigationView.setNavigationItemSelectedListener(this);
         setFragmentScreen(R.id.navigation_a);
@@ -111,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initializeViews(FirebaseAuth mAuth, Account mAccount, FirebaseUser mUser) {
         if (mAuth != null && mAccount != null && mUser != null) {
             String username = mUser.getDisplayName();
-            String email = mUser.getEmail();
             String points = String.valueOf(mAccount.getPoints());
             NavHeaderName.setText(username);
             NavHeaderPoints.setText(points);
@@ -207,4 +216,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setCheckedItem(itemId);
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
+
+    // ADS UNITY
+    private void initializeUnity() {
+        UnityAds.initialize(MainActivity.this, "5283279", false, new IUnityAdsInitializationListener() {
+            @Override
+            public void onInitializationComplete() {
+                // initializeUnityBanner();
+            }
+
+            @Override
+            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
+
+            }
+        });
+    }
+
+    public void initializeUnityInterstitial() {
+        UnityAds.load("Interstitial_Android", new IUnityAdsLoadListener() {
+            @Override
+            public void onUnityAdsAdLoaded(String placementId) {
+                UnityAds.show(MainActivity.this, placementId, new IUnityAdsShowListener() {
+                    @Override
+                    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
+
+                    }
+
+                    @Override
+                    public void onUnityAdsShowStart(String placementId) {
+
+                    }
+
+                    @Override
+                    public void onUnityAdsShowClick(String placementId) {
+
+                    }
+
+                    @Override
+                    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+
+            }
+        });
+    }
+
+    private void initializeInterstitial() {
+        SharedPreferences sharedPreferences = getSharedPreferences("ads", Context.MODE_PRIVATE);
+        long lastAdTime = sharedPreferences.getLong("last_ad_time", 0);
+        long currentTime = System.currentTimeMillis();
+        long thirtyMinutesInMillis = 30 * 60 * 1000;
+        if (currentTime - lastAdTime >= thirtyMinutesInMillis) {
+            initializeUnityInterstitial();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putLong("last_ad_time", currentTime);
+            editor.apply();
+        }
+    }
+
 }
