@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -38,7 +41,7 @@ import com.mobiletv.app.R;
 import com.mobiletv.app.fragment.FragmentA;
 import com.mobiletv.app.fragment.FragmentB;
 import com.mobiletv.app.fragment.FragmentC;
-import com.mobiletv.app.pojo.Account;
+import com.mobiletv.app.pojo.AccountData;
 import com.mobiletv.app.widget.Badge;
 import com.mobiletv.app.widget.MaterialEditText;
 import com.mobiletv.app.update.UpdateChecker;
@@ -52,11 +55,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Badge NavHeaderPoints;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private AppCompatTextView NavHeaderName;
+    private AppCompatTextView NavHeaderName, NavHeaderVersion;
+    private AppCompatImageView NavHeaderSignOut;
     private Fragment mFragment;
     private int mFragmentSelected = -1;
-    private DatabaseReference mData;
     private MenuItem menuItem;
+    private AccountData accountData;
+    private View navigationViewHeader;
+
+    private DatabaseReference mData;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (UnityAds.isInitialized()) {
+            initializeInterstitial();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         initializeConnection();
         initializeFindViews();
-        initializeUnity();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         initializeFirebase();
-        if (UnityAds.isInitialized()) {
-            initializeInterstitial();
-        }
+        initializeUnity();
     }
 
     private void initializeFindViews() {
@@ -84,26 +93,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer);
         mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        View navigationViewHeader = mNavigationView.getHeaderView(0);
+        navigationViewHeader = mNavigationView.getHeaderView(0);
         NavHeaderName = navigationViewHeader.findViewById(R.id.nav_header_name);
         NavHeaderName.setSelected(true);
         NavHeaderPoints = navigationViewHeader.findViewById(R.id.nav_header_points);
+        NavHeaderVersion = findViewById(R.id.nav_footer_version);
+        NavHeaderSignOut = findViewById(R.id.nav_footer_sign_out);
         mNavigationView.setNavigationItemSelectedListener(this);
         setFragmentScreen(R.id.navigation_a);
-        menuItem = mNavigationView.getMenu().findItem(R.id.navigation_d);
+        menuItem = mNavigationView.getMenu().findItem(R.id.navigation_admin);
     }
 
     private void initializeFirebase() {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mUser = mAuth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         mData = FirebaseDatabase.getInstance().getReference();
         if (mUser != null) {
-            mData.child("users").child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
+            String uid = mUser.getUid();
+            mData.child("users").child(uid).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Account mAccount = snapshot.getValue(Account.class);
-                    if (mAccount != null) {
-                        initializeViews(mAuth, mAccount, mUser);
+                    accountData = snapshot.getValue(AccountData.class);
+                    if (accountData != null) {
+                        initializeViews(accountData);
                     }
                 }
 
@@ -118,17 +130,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void initializeViews(FirebaseAuth mAuth, Account mAccount, FirebaseUser mUser) {
-        if (mAuth != null && mAccount != null && mUser != null) {
-            String username = mUser.getDisplayName();
-            String points = String.valueOf(mAccount.getPoints());
-            NavHeaderName.setText(username);
-            NavHeaderPoints.setText(points);
-            if (TextUtils.isEmpty(username)) {
-                openDialogUpdate();
-            }
-            menuItem.setVisible(mAccount.isAdmin());
+    private void initializeViews(AccountData mAccountData) {
+        String username = mAccountData.getName();
+        String points = String.valueOf(mAccountData.getPoints());
+        NavHeaderName.setText(username);
+        NavHeaderPoints.setText(points);
+        if (TextUtils.isEmpty(username)) {
+            openDialogUpdate();
         }
+        menuItem.setVisible(mAccountData.getAdmin());
+
+
+        if (navigationViewHeader != null && getVersion() != null) {
+            NavHeaderVersion.setText(getVersion());
+        }
+        NavHeaderSignOut.setOnClickListener(v -> {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(MainActivity.this, R.style.MaterialDialog);
+            mBuilder.setTitle(getString(R.string.sign_out));
+            mBuilder.setMessage(getString(R.string.would_you_like_to_end_your_session_now));
+            mBuilder.setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss());
+            mBuilder.setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                if (mUser != null) {
+                    mAuth.signOut();
+                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                    finish();
+                }
+            });
+            mBuilder.setCancelable(false);
+            mBuilder.show();
+        });
     }
 
     @Override
@@ -155,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            mData.child("users").child(uid).child("username").setValue(username).addOnCompleteListener(task1 -> {
+                            mData.child("users").child(uid).child("name").setValue(username).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
                                     mData.child("users").child(uid).child("points").setValue(ServerValue.increment(1500));
                                     mDialog.dismiss();
@@ -203,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.navigation_c:
                 mFragment = new FragmentC();
                 break;
-            case R.id.navigation_d:
+            case R.id.navigation_admin:
                 startActivity(new Intent(MainActivity.this, FormActivity.class));
                 break;
         }
@@ -227,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
-
+                // Handle Unity Ads initialization error
             }
         });
     }
@@ -239,29 +270,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 UnityAds.show(MainActivity.this, placementId, new IUnityAdsShowListener() {
                     @Override
                     public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
-
+                        // Handle Unity Ads show failure
                     }
 
                     @Override
                     public void onUnityAdsShowStart(String placementId) {
-
+                        // Handle Unity Ads show start
                     }
 
                     @Override
                     public void onUnityAdsShowClick(String placementId) {
-
+                        // Handle Unity Ads show click
                     }
 
                     @Override
                     public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
-
+                        // Handle Unity Ads show complete
                     }
                 });
             }
 
             @Override
             public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
-
+                // Handle Unity Ads load failure
             }
         });
     }
@@ -279,4 +310,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public String getVersion() {
+        try {
+            PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+            return "v" + packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

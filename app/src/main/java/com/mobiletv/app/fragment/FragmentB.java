@@ -37,7 +37,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.mobiletv.app.R;
 import com.mobiletv.app.player.AdvancedPlayer;
-import com.mobiletv.app.pojo.Account;
+import com.mobiletv.app.pojo.AccountData;
 import com.mobiletv.app.pojo.Series;
 import com.mobiletv.app.widget.ImageRounded;
 
@@ -48,7 +48,7 @@ public class FragmentB extends Fragment {
     private DatabaseReference mData;
     private RecyclerView mRecyclerView;
     private int cardWidth;
-    private Account mAccount;
+    private AccountData mAccountData;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_b, container, false);
@@ -90,7 +90,7 @@ public class FragmentB extends Fragment {
             mData.child("users").child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    mAccount = snapshot.getValue(Account.class);
+                    mAccountData = snapshot.getValue(AccountData.class);
                 }
 
                 @Override
@@ -165,9 +165,9 @@ public class FragmentB extends Fragment {
         }
         dialogDismiss.setOnClickListener(v -> mDialog.dismiss());
         dialogAction.setOnClickListener(v -> {
-            if (mAccount != null && mUser != null) {
+            if (mAccountData != null && mUser != null) {
                 String uid = mUser.getUid();
-                if (mAccount.getPoints() > 0) {
+                if (mAccountData.getPoints() > 0) {
                     mData.child("users").child(uid).child("points").setValue(ServerValue.increment(-10));
                     mData.child("series").child(key).child("views").setValue(ServerValue.increment(1));
                     startActivity(new Intent(requireActivity(), AdvancedPlayer.class).putExtra("key", key));

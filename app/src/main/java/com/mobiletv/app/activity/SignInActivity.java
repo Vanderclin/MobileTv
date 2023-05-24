@@ -3,6 +3,7 @@ package com.mobiletv.app.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,23 +22,27 @@ public class SignInActivity extends AppCompatActivity {
     private DatabaseReference mData;
 
     private TextInputEditText inputEmail, inputPassword;
-    private MaterialButton buttonSignIn;
+    private MaterialButton buttonSignIn, buttonSignUp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_sign);
         mAuth = FirebaseAuth.getInstance();
         mData = FirebaseDatabase.getInstance().getReference();
         initializationFirebase();
 
         inputEmail = findViewById(R.id.input_email);
         inputPassword = findViewById(R.id.input_password);
+        buttonSignUp = findViewById(R.id.button_sign_up);
         buttonSignIn = findViewById(R.id.button_sign_in);
-        initializationSignIn();
+        buttonSignUp.setText(R.string.sign_up);
+        buttonSignIn.setText(R.string.sign_in);
+        initializationSign();
     }
 
-    private void initializationSignIn() {
+    private void initializationSign() {
+        buttonSignUp.setOnClickListener(v -> startActivity(new Intent(SignInActivity.this, SignUpActivity.class)));
         buttonSignIn.setOnClickListener(view -> {
             String email = String.valueOf(inputEmail.getText());
             String password = String.valueOf(inputPassword.getText());

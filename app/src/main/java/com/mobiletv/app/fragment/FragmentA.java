@@ -35,6 +35,7 @@ public class FragmentA extends Fragment {
     private DatabaseReference mData;
     private CarouselView carouselView;
     private int currentPage = 0;
+    private ViewGroup bannerContainer;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_a, container, false);
@@ -51,6 +52,8 @@ public class FragmentA extends Fragment {
 
     private void initializeCarousel() {
         carouselView = requireActivity().findViewById(R.id.carouselView);
+        bannerContainer = requireActivity().findViewById(R.id.fragment_banner_a);
+
         mData.child("carousel").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -89,7 +92,9 @@ public class FragmentA extends Fragment {
         UnityAds.initialize(requireActivity(), "5283279", false, new IUnityAdsInitializationListener() {
             @Override
             public void onInitializationComplete() {
-                initializeUnityBanner();
+                if (isFragmentAttached()) {
+                    initializeUnityBanner();
+                }
             }
 
             @Override
@@ -102,12 +107,11 @@ public class FragmentA extends Fragment {
     private void initializeUnityBanner() {
         IUnityBannerListener mBanner = new IUnityBannerListener() {
             public void onUnityBannerLoaded(String s, View view) {
-                if (isAdded()) { // Verifica se o fragmento está vinculado à atividade
+                if (isAdded()) {
                     ViewGroup parent = (ViewGroup) view.getParent();
                     if (parent != null) {
                         parent.removeView(view);
                     }
-                    ViewGroup bannerContainer = requireActivity().findViewById(R.id.banner_view_a);
                     bannerContainer.addView(view);
                 }
             }
@@ -139,5 +143,9 @@ public class FragmentA extends Fragment {
         };
         UnityBanners.setBannerListener(mBanner);
         UnityBanners.loadBanner(requireActivity(), "Banner_Android");
+    }
+
+    private boolean isFragmentAttached() {
+        return isAdded() && getActivity() != null;
     }
 }

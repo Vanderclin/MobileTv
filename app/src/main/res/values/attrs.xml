@@ -59,4 +59,7 @@
         <attr name="badge_text_color_hint" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="NavigationDrawer">
+        <attr name="footerLayout" format="reference" />
+    </declare-styleable>
 </resources>

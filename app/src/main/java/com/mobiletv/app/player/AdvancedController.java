@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -26,12 +27,9 @@ import java.util.Locale;
 
 public class AdvancedController extends FrameLayout {
 
-
     private Context mContext;
     private MediaPlayerControl mPlayer;
-    private AdvancedVideo mAdvancedVideo;
     private ProgressBar mProgress;
-    private OrientationDetector orientationDetector;
     private boolean mShowing = true;
     private boolean mDragging;
     private boolean mScalable = false;
@@ -49,16 +47,13 @@ public class AdvancedController extends FrameLayout {
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
 
-
+    private ViewGroup advancedBanner;
     private ViewGroup advancedLoading;
     private ViewGroup advancedError;
-
     private View advancedLayoutTop;
     private AppCompatImageView advancedBack;
     private AppCompatTextView advancedTitle;
-
     private View advancedCenterPlayer;
-
     private View advancedLayoutBottom;
     private AppCompatImageView advancedPlayer;
     private AppCompatTextView advancedTime;
@@ -69,7 +64,7 @@ public class AdvancedController extends FrameLayout {
     public AdvancedController(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        TypedArray a = mContext.obtainStyledAttributes(attrs, R.styleable.MediaController);
+        @SuppressLint("CustomViewStyleable") TypedArray a = mContext.obtainStyledAttributes(attrs, R.styleable.MediaController);
         mScalable = a.getBoolean(R.styleable.MediaController_scalable, false);
         a.recycle();
         init(context);
@@ -89,15 +84,13 @@ public class AdvancedController extends FrameLayout {
     }
 
     private void initControllerView(View v) {
+        advancedBanner = v.findViewById(R.id.advanced_banner);
         advancedLoading = v.findViewById(R.id.advanced_loading);
         advancedError = v.findViewById(R.id.advanced_error);
-
         advancedLayoutTop = v.findViewById(R.id.advanced_layout_top);
         advancedBack = v.findViewById(R.id.advanced_back);
         advancedTitle = v.findViewById(R.id.advanced_title);
-
         advancedCenterPlayer = v.findViewById(R.id.advanced_center_player);
-
         advancedLayoutBottom = v.findViewById(R.id.advanced_layout_bottom);
         advancedPlayer = v.findViewById(R.id.advanced_player);
         advancedTime = v.findViewById(R.id.advanced_time);
@@ -134,8 +127,6 @@ public class AdvancedController extends FrameLayout {
 
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
-
-
     }
 
     public void setMediaPlayer(MediaPlayerControl player) {
@@ -145,6 +136,14 @@ public class AdvancedController extends FrameLayout {
 
     public void show() {
         show(sDefaultTimeout);
+    }
+
+    public void setBanner(View view) {
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent != null) {
+            parent.removeView(view);
+        }
+        advancedBanner.addView(view);
     }
 
     private void disableUnsupportedButtons() {
@@ -172,6 +171,7 @@ public class AdvancedController extends FrameLayout {
         setVisibility(VISIBLE);
         advancedLayoutTop.setVisibility(VISIBLE);
         advancedLayoutBottom.setVisibility(VISIBLE);
+        advancedBanner.setVisibility(GONE);
 
         mHandler.sendEmptyMessage(SHOW_PROGRESS);
 
@@ -191,6 +191,7 @@ public class AdvancedController extends FrameLayout {
             mHandler.removeMessages(SHOW_PROGRESS);
             advancedLayoutTop.setVisibility(GONE);
             advancedLayoutBottom.setVisibility(GONE);
+            advancedBanner.setVisibility(VISIBLE);
             mShowing = false;
         }
     }
@@ -233,6 +234,7 @@ public class AdvancedController extends FrameLayout {
         }
     };
 
+    @SuppressLint("NonConstantResourceId")
     private void showCenterView(int resId) {
         switch (resId) {
             case R.id.advanced_loading:
@@ -313,7 +315,7 @@ public class AdvancedController extends FrameLayout {
                 break;
             case MotionEvent.ACTION_UP:
                 if (!handled) {
-                    handled = false;
+                    // handled = false;
                     show(sDefaultTimeout);
                 }
                 break;
@@ -408,15 +410,16 @@ public class AdvancedController extends FrameLayout {
 
     private final OnClickListener mBackListener = new OnClickListener() {
         public void onClick(View v) {
-            if (mIsFullScreen) {
+            if (mIsFullScreen && mPlayer != null) {
                 mIsFullScreen = false;
                 updateScaleButton();
                 updateBackButton();
                 mPlayer.setFullscreen(false);
+            } else {
+                Toast.makeText(mContext, mContext.getString(R.string.only_when_playing_the_video), Toast.LENGTH_SHORT).show();
             }
         }
     };
-    // OK
 
     private final OnClickListener mCenterPlayListener = new OnClickListener() {
         public void onClick(View v) {
@@ -513,7 +516,9 @@ public class AdvancedController extends FrameLayout {
         if (mScalable) {
             advancedScale.setEnabled(enabled);
         }
-        advancedBack.setEnabled(true);
+        if (advancedPlayer != null) {
+            advancedBack.setEnabled(true);
+        }
     }
     // OK
 

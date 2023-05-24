@@ -67,6 +67,7 @@
 
     <style name="MaterialDialogTitleColor" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
         <item name="android:textColor">@color/theme_color_components</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="MaterialDialogBodyColor" parent="@style/MaterialAlertDialog.MaterialComponents.Body.Text">

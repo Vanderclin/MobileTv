@@ -27,7 +27,7 @@
 
 
     <color name="font_color">#F8F9FA</color>
-    <color name="font_hint">#6C757D</color>
+    <color name="font_hint">#80F8F9FA</color>
 
     <color name="color_input_layout_normal">@color/color_light</color>
     <color name="color_input_layout_states">@color/color_light</color>

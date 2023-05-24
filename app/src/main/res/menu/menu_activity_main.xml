@@ -17,9 +17,9 @@
             android:title="@string/earn_points" />
 
         <item
-            android:id="@+id/navigation_d"
+            android:id="@+id/navigation_admin"
             android:icon="@drawable/icon_config"
-            android:title="@string/configuration"
+            android:title="@string/administrative"
             android:visible="false" />
     </group>
 </menu>

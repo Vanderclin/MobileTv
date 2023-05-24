@@ -1,6 +1,6 @@
 {
-  "description": "* Correções de erros, mudanças na interface",
-  "code": 3,
+  "description": "* Correções de erros",
+  "code": 5,
   "url": "https://raw.githubusercontent.com/Vanderclin/MobileTv/main/app/release/app-release.apk",
-  "version": "1.2"
+  "version": "1.4"
 }

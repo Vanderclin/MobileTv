@@ -19,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.mobiletv.app.R;
 import com.mobiletv.app.adapter.AdapterCarousel;
-import com.mobiletv.app.pojo.Account;
 import com.mobiletv.app.pojo.Carousel;
 import com.mobiletv.app.widget.CarouselView;
 import com.unity3d.ads.IUnityAdsInitializationListener;

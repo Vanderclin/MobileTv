@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -14,14 +14,14 @@
             android:layout_height="250dp"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/card_pager_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/icon_placeholder_carousel" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/card_pager_cover"
                 android:layout_width="180dp"
                 android:layout_height="match_parent"
@@ -29,9 +29,10 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/icon_placeholder_carousel" />
 
+
         </FrameLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -39,7 +40,7 @@
             android:orientation="vertical"
             android:padding="@dimen/padding_medium">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/card_pager_title"
                 style="@style/FontTitle"
                 android:layout_width="wrap_content"
@@ -51,7 +52,7 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/card_pager_desc"
                 style="@style/FontSmall"
                 android:layout_width="wrap_content"
@@ -63,8 +64,14 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/banner_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center" />
 
 </androidx.cardview.widget.CardView>

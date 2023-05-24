@@ -12,10 +12,10 @@ android {
                 def outputMetadataFile = file("release/update.json")
                 def gson = new GsonBuilder().setPrettyPrinting().create()
                 def outputMetadataJson = [
-                        description: "* Correções de erros, mudanças na interface",
-                        code       : 3,
+                        description: "* Correções de erros",
+                        code       : 5,
                         url        : "https://raw.githubusercontent.com/Vanderclin/MobileTv/main/app/release/app-release.apk",
-                        version    : "1.2"
+                        version    : "1.4"
                 ]
                 def outputMetadataJsonString = gson.toJson(outputMetadataJson)
                 outputMetadataFile.write(outputMetadataJsonString)
@@ -51,8 +51,8 @@ android {
         applicationId "com.mobiletv.app"
         minSdk 21
         targetSdk 33
-        versionCode 3
-        versionName "1.2"
+        versionCode 5
+        versionName "1.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

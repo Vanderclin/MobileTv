@@ -57,6 +57,11 @@
 
 
     <string name="confirmation_debit_message">Após a confirmação, serão debitados 10 pontos da sua conta para que você possa ter acesso ao conteúdo.</string>
+    <string name="administrative">Administrativo</string>
+    <string name="only_when_playing_the_video">Somente ao reproduzir o vídeo</string>
+    <string name="sign_up">Inscrever-se</string>
+    <string name="sign_out">Finalizar sessão</string>
+    <string name="would_you_like_to_end_your_session_now">Gostaria de encerrar sua sessão agora?</string>
 
 
 </resources>

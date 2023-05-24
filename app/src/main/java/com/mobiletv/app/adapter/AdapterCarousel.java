@@ -71,7 +71,6 @@ public class AdapterCarousel extends PagerAdapter {
         AppCompatImageView carouselCover = view.findViewById(R.id.card_pager_cover);
         AppCompatTextView carouselTitle = view.findViewById(R.id.card_pager_title);
         AppCompatTextView carouselDescription = view.findViewById(R.id.card_pager_desc);
-
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(carouselImage, "scaleX", 1.0f, 1.5f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(carouselImage, "scaleY", 1.0f, 1.5f);
         scaleX.setRepeatCount(ObjectAnimator.INFINITE);
@@ -83,13 +82,11 @@ public class AdapterCarousel extends PagerAdapter {
         scaleAnim.setStartDelay(1000);
         scaleAnim.play(scaleY).with(scaleX);
         scaleAnim.start();
-
         String address = carouselList.get(position).getAddress();
         String description = carouselList.get(position).getDescription();
         String image = carouselList.get(position).getImage();
         String key = carouselList.get(position).getKey();
         String title = carouselList.get(position).getTitle();
-
         Glide.with(mContext).asBitmap().load(image).placeholder(R.drawable.icon_placeholder_carousel).into(new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -102,15 +99,14 @@ public class AdapterCarousel extends PagerAdapter {
                 // Empty Implementation
             }
         });
-        Glide.with(mContext).load(image).placeholder(R.drawable.icon_placeholder_carousel).into(carouselCover);
 
+        Glide.with(mContext).load(image).placeholder(R.drawable.icon_placeholder_carousel).into(carouselCover);
         carouselTitle.setText(title);
         carouselTitle.setSelected(true);
         carouselDescription.setText(description);
         carouselDescription.setSelected(true);
         container.addView(view);
         return view;
-
     }
 
     private Bitmap applyBlur(Bitmap image, int radius) {

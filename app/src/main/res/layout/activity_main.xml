@@ -44,7 +44,11 @@
             app:itemBackground="@drawable/navigation_background"
             app:itemIconTint="@color/navigation_item"
             app:itemTextColor="@color/navigation_item"
-            app:menu="@menu/menu_activity_main" />
+            app:menu="@menu/menu_activity_main">
+
+            <include layout="@layout/navigation_footer" />
+
+        </com.google.android.material.navigation.NavigationView>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
