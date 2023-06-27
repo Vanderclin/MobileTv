@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/advanced_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/advanced_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/player_night"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/player_loading" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/advanced_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/player_night"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/player_error" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/advanced_layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:background="@color/player_translucent"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/player_padding_small"
+        android:paddingEnd="@dimen/player_padding_small">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/advanced_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/player_arrow_back"
+            android:visibility="invisible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/advanced_title"
+            style="@style/PlayerFontTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:ellipsize="end"
+            android:gravity="center|start"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:singleLine="true" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/advanced_center_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/player_button_background"
+        android:src="@drawable/player_play"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/advanced_layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/player_translucent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/advanced_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/player_transparent"
+            android:gravity="center"
+            android:padding="@dimen/player_padding_small"
+            android:scaleType="fitCenter"
+            android:src="@drawable/player_play" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/player_padding_small"
+            android:paddingEnd="@dimen/player_padding_small">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/advanced_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/time"
+                android:textColor="@color/player_light" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/advanced_progress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:indeterminateDrawable="@drawable/player_progress_line"
+                android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:progressDrawable="@drawable/player_progress_line"
+                android:thumb="@drawable/player_dot"
+                android:thumbOffset="10dip" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/advanced_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/time"
+                android:textColor="@color/player_light" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/advanced_scale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/player_transparent"
+            android:padding="@dimen/player_padding_small"
+            android:scaleType="center"
+            android:src="@drawable/player_fullscreen_open"
+            android:visibility="gone" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

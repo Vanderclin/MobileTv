@@ -33,7 +33,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_small"
             app:badge_text="@string/zero" />
+
+        <com.mobiletv.app.widget.Badge
+            android:id="@+id/nav_header_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_small"
+            app:badge_text="@string/balance" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

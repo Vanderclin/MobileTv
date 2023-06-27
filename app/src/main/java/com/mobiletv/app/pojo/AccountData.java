@@ -6,6 +6,7 @@ public class AccountData {
     private boolean admin;
     private String device;
     private String email;
+    private boolean member;
     private String name;
     private int points;
     private long timestamp;
@@ -15,11 +16,12 @@ public class AccountData {
         // Need Constructor
     }
 
-    public AccountData(long access, boolean admin, String device, String email, String name, int points, long timestamp, String uid) {
+    public AccountData(long access, boolean admin, String device, String email, boolean member, String name, int points, long timestamp, String uid) {
         this.access = access;
         this.admin = admin;
         this.device = device;
         this.email = email;
+        this.member = member;
         this.name = name;
         this.points = points;
         this.timestamp = timestamp;
@@ -30,9 +32,7 @@ public class AccountData {
         return access;
     }
 
-    public boolean getAdmin() {
-        return admin;
-    }
+    public boolean isAdmin() { return admin; }
 
     public String getDevice() {
         return device;
@@ -41,6 +41,8 @@ public class AccountData {
     public String getEmail() {
         return email;
     }
+
+    public boolean isMember() { return member; }
 
     public String getName() {
         return name;

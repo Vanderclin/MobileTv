@@ -1,40 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="gray">#969696</color>
-    <color name="light_gray">#ffF0F0F0</color>
-
     <color name="background_controller">#80000000</color>
-
     <color name="color_success">#198754</color>
     <color name="color_danger">#DC3545</color>
     <color name="color_warning">#FFC107</color>
     <color name="color_info">#0dcaf0</color>
-    <color name="color_light">#f8f9fa</color>
+    <color name="color_light">#dfe0e1</color>
     <color name="color_night">#000000</color>
-    <color name="color_light_hint">#6c757d</color>
-
+    <color name="color_hint">#80F8F9FA</color>
     <color name="color_muted">#212529</color>
-    <color name="color_purple">#6200EE</color>
     <color name="color_transparent">#00000000</color>
     <color name="color_translucent">#BB000000</color>
-
-
     <color name="font_color">#F8F9FA</color>
     <color name="font_hint">#80F8F9FA</color>
-
     <color name="color_input_layout_normal">@color/color_light</color>
     <color name="color_input_layout_states">@color/color_light</color>
     <color name="theme_color_components">#FFFFFF</color>
+    <color name="color_purple">#6200EE</color>
     <color name="theme_color_components_disabled">#804200a2</color>
     <color name="theme_color_dialog">#4200a2</color>
-
     <color name="theme_color_background">#230056</color>
     <color name="theme_color_night">#1F1F1F</color>
 </resources>

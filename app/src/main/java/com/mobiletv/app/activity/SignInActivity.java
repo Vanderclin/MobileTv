@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobiletv.app.R;
+import com.mobiletv.app.update.UpdateChecker;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -38,6 +39,7 @@ public class SignInActivity extends AppCompatActivity {
         buttonSignIn = findViewById(R.id.button_sign_in);
         buttonSignUp.setText(R.string.sign_up);
         buttonSignIn.setText(R.string.sign_in);
+
         initializationSign();
     }
 

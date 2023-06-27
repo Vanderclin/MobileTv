@@ -1,21 +1,16 @@
 package com.mobiletv.app.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -36,18 +31,19 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.mobiletv.app.R;
-import com.mobiletv.app.player.AdvancedPlayer;
+import com.mobiletv.app.activity.PlayerActivity;
+import com.mobiletv.app.adverts.UnityManager;
 import com.mobiletv.app.pojo.AccountData;
 import com.mobiletv.app.pojo.Series;
+import com.mobiletv.app.widget.CardImageView;
 import com.mobiletv.app.widget.ImageRounded;
+import com.unity3d.ads.UnityAds;
 
-public class FragmentB extends Fragment {
+public class FragmentB extends Fragment implements UnityManager.UnityInterstitialListener, UnityManager.UnityRewardedListener {
 
-    private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mData;
     private RecyclerView mRecyclerView;
-    private int cardWidth;
     private AccountData mAccountData;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,30 +56,18 @@ public class FragmentB extends Fragment {
         requireActivity().setTitle(getString(R.string.series));
         initializeFindView();
         initializeFirebase();
+        initializeUnity();
     }
 
     private void initializeFindView() {
         mRecyclerView = requireActivity().findViewById(R.id.recycler_b);
-        GridLayoutManager gridManager = new GridLayoutManager(requireActivity(), 3);
-        gridManager.setOrientation(RecyclerView.VERTICAL);
-        mRecyclerView.setLayoutManager(gridManager);
-        calculateCardWidth();
-    }
-
-    private void calculateCardWidth() {
-        WindowManager windowManager = (WindowManager) requireActivity().getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        display.getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
-
-        int horizontalSpacing = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
-        int gridPadding = getResources().getDimensionPixelSize(R.dimen.grid_padding);
-        cardWidth = (screenWidth - (2 * gridPadding) - (2 * horizontalSpacing)) / 3;
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireActivity(), getSpanCount());
+        gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
     }
 
     private void initializeFirebase() {
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         mData = FirebaseDatabase.getInstance().getReference();
         if (mUser != null) {
@@ -112,13 +96,8 @@ public class FragmentB extends Fragment {
                 String description = series.getDescription();
                 String key = getRef(p).getKey();
                 String title = series.getTitle();
-
-                Glide.with(requireActivity()).load(cover).placeholder(R.drawable.ic_launcher_background).into(mHolder.cardMovie);
-                ViewGroup.LayoutParams layoutParams = mHolder.cardMovie.getLayoutParams();
-                layoutParams.width = cardWidth;
-                mHolder.cardMovie.setLayoutParams(layoutParams);
-
-                mHolder.cardMovie.setOnClickListener(v -> {
+                mHolder.cardView.setImageGlide(cover);
+                mHolder.cardView.setOnClickListener(v -> {
                     openDialogWatch(cover, description, key, title);
                 });
             }
@@ -135,11 +114,11 @@ public class FragmentB extends Fragment {
     }
 
     public static class ViewSeries extends RecyclerView.ViewHolder {
-        public AppCompatImageView cardMovie;
+        public CardImageView cardView;
 
         public ViewSeries(@NonNull View rootView) {
             super(rootView);
-            cardMovie = rootView.findViewById(R.id.item_series);
+            cardView = rootView.findViewById(R.id.card_view);
         }
     }
 
@@ -170,7 +149,7 @@ public class FragmentB extends Fragment {
                 if (mAccountData.getPoints() > 0) {
                     mData.child("users").child(uid).child("points").setValue(ServerValue.increment(-10));
                     mData.child("series").child(key).child("views").setValue(ServerValue.increment(1));
-                    startActivity(new Intent(requireActivity(), AdvancedPlayer.class).putExtra("key", key));
+                    startActivity(new Intent(requireActivity(), PlayerActivity.class).putExtra("key", key));
                     mDialog.dismiss();
                 } else {
                     Toast.makeText(requireActivity(), getString(R.string.insufficient_points), Toast.LENGTH_SHORT).show();
@@ -180,6 +159,65 @@ public class FragmentB extends Fragment {
         });
         mDialog.setCancelable(false);
         mDialog.show();
+    }
+
+
+    private int getSpanCount() {
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        if (screenWidth >= 1200) {
+            return 4;
+        } else if (screenWidth >= 800) {
+            return 3;
+        } else {
+            return 2;
+        }
+    }
+
+    private void initializeUnity() {
+        UnityManager mUnityManager = new UnityManager(requireActivity(), getString(R.string.unity_game_app), getString(R.string.unity_game_banner), getString(R.string.unity_game_interstitial), getString(R.string.unity_game_rewarded), requireActivity().findViewById(R.id.fragment_banner_navigation));
+        mUnityManager.initializeUnity();
+        if (isFragmentAttached()) {
+            mUnityManager.initializeUnityBanner();
+        }
+        mUnityManager.initializeUnityInterstitial();
+        mUnityManager.initializeUnityRewards();
+        mUnityManager.setUnityInterstitialListener(this);
+        mUnityManager.setUnityRewardedListener(this);
+    }
+
+    private boolean isFragmentAttached() {
+        return isAdded() && getActivity() != null;
+    }
+
+
+    @Override
+    public void onInterstitialShowFailure() {
+
+    }
+
+    @Override
+    public void onInterstitialShowComplete(UnityAds.UnityAdsShowCompletionState state) {
+
+    }
+
+    @Override
+    public void onInterstitialFailedToLoaded() {
+
+    }
+
+    @Override
+    public void onRewardedShowFailure() {
+
+    }
+
+    @Override
+    public void onRewardedShowComplete(UnityAds.UnityAdsShowCompletionState state) {
+
+    }
+
+    @Override
+    public void onRewardedFailedToLoaded() {
+
     }
 
 }

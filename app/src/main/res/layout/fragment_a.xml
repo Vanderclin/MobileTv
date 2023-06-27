@@ -21,10 +21,4 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <FrameLayout
-        android:id="@+id/fragment_banner_a"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

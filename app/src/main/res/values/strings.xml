@@ -52,7 +52,7 @@
     <string name="download">Baixar</string>
     <string name="cancel">Cancelar</string>
     <string name="last_installed_version">Última versão instalada</string>
-    <string name="downloading">Baixando: %1$d%%</string>
+    <string name="downloading">Baixando: %1$d%</string>
     <string name="checking_the_version">Verificando a versão</string>
 
 
@@ -62,6 +62,26 @@
     <string name="sign_up">Inscrever-se</string>
     <string name="sign_out">Finalizar sessão</string>
     <string name="would_you_like_to_end_your_session_now">Gostaria de encerrar sua sessão agora?</string>
+    <string name="javabot">Javabot</string>
+    <string name="enter_your_message">Digite sua mensagem</string>
+    <string name="send">Enviar</string>
+
+    <string name="delete_conversation">Excluir Conversa</string>
+    <string name="delete_conversation_message">Tem certeza de que deseja excluir a conversa?</string>
+    <string name="delete_yes">Excluir</string>
+    <string name="delete_not">Cancelar</string>
+    <string name="history">Histórico</string>
+    <string name="sorry_did_not_understand">Desculpe, não posso responder a essa pergunta ainda.</string>
+
+
+    <string name="message_history">Histórico de Mensagens</string>
+    <string name="history_deleted_successfully">Histórico excluído com sucesso</string>
+    <string name="history_could_not_be_deleted">O histórico não pôde ser excluído</string>
+    <string name="history_file_does_not_exist">O arquivo de histórico não existe</string>
+    <string name="share_file">Compartilhar arquivo</string>
+    <string name="no_share_apps_available">Nenhum aplicativo de compartilhamento disponível</string>
+    <string name="user_not_logged_in">Usuário não conectado.</string>
+    <string name="balance">R$ 0,00</string>
 
 
 </resources>

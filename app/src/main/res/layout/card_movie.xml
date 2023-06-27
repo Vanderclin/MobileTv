@@ -3,10 +3,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.mobiletv.app.widget.Cover
         android:id="@+id/item_series_cover"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_placeholder_cards" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -3,7 +3,7 @@
     <style name="AppThemeDark" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <item name="colorPrimary">@color/color_purple</item>
         <item name="colorPrimaryDark">@color/color_purple</item>
-        <item name="colorAccent">@color/teal_200</item>
+        <item name="colorAccent">@color/color_night</item>
         <item name="android:statusBarColor">@color/color_purple</item>
         <item name="android:windowBackground">@color/theme_color_background</item>
         <item name="android:navigationBarColor">@color/color_purple</item>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unity_game_app">5283279</string>
+    <string name="unity_game_banner">Banner_Android</string>
+    <string name="unity_game_interstitial">Interstitial_Android</string>
+    <string name="unity_game_rewarded">Rewarded_Android</string>
+    <bool name="unity_game_test_mode">false</bool>
+</resources>

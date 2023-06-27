@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="javabot_primary">
+        <!-- TODO : Inicialização -->
+        <item>Oi</item>
+        <item>Olá</item>
+        <!-- TODO : Ganhar Pontos -->
+        <item>Como ganhar?</item>
+        <item>Para que serve?</item>
+        <!-- TODO : Contribuição -->
+        <item>Como funciona a contribuição</item>
+        <item>Como fazer parte da contribuição</item>
+        <!-- TODO : Remuneração -->
+        <item>Como funciona a remuneração</item>
+        <item>Como fazer parte da remuneração</item>
+    </string-array>
+
+    <string-array name="javabot_secondary">
+        <!-- TODO : Inicialização -->
+        <item>Oi %1$s, como posso ajuda?\n\nPontos\n-\tComo ganhar?\n-\tPara que serve?\n\nContribuição\n-\tComo funciona a contribuição\n-\tComo fazer parte da contribuição\n\nRemuneração\n-\tComo funciona a remuneração\n-\tComo fazer parte da remuneração</item>
+        <item>Olá %1$s, como posso ajuda?\n\nPontos\n-\tComo ganhar?\n-\tPara que serve?\n\nContribuição\n-\tComo funciona a contribuição\n-\tComo fazer parte da contribuição\n\nRemuneração\n-\tComo funciona a remuneração\n-\tComo fazer parte da remuneração</item>
+        <!-- TODO : Ganhar Pontos -->
+        <item>Você pode ganhar mais pontos acessando o menu lateral, depois clique em ganhar pontos!</item>
+        <item>Os pontos serve para você desbloquear o acesso as séries no aplicativo, assim também ajudando a manter o aplicativo gratuito!</item>
+        <!-- TODO : Contrinuição -->
+        <item>Caso você queira fazer parte da contribuição neste aplicativo, em breve iremos adicionar um passo a passo sobre como você pode contribuir com as séries no aplicativo.</item>
+        <item>O usuário que faz parte da contribuição terá acesso especial no aplicativo, onde poderá adicionar séries. Através dessa ação, o usuário poderá ser remunerado.</item>
+        <!-- TODO : Remuneração -->
+        <item>Se você já faz parte da contribuição, poderá ganhar dinheiro ajudando a adicionar mais séries. Dessa forma, poderemos trazer mais conteúdo para o aplicativo. Com a ajuda de todos, podemos chegar longe.</item>
+        <item>Cada série que você adicionar poderá gerar um valor, que será acumulado em sua conta no aplicativo e posteriormente será transferido para sua conta bancária.</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TODO : Colors -->
+    <color name="player_background">#80000000</color>
+    <color name="player_danger">#DC3545</color>
+    <color name="player_hint">#80F8F9FA</color>
+    <color name="player_light">#dfe0e1</color>
+    <color name="player_muted">#212529</color>
+    <color name="player_night">#000000</color>
+    <color name="player_purple">#6200EE</color>
+    <color name="player_purple_background">#230056</color>
+    <color name="player_purple_components">#4200a2</color>
+    <color name="player_success">#198754</color>
+    <color name="player_translucent">#BB000000</color>
+    <color name="player_transparent">#00000000</color>
+    <color name="player_warning">#FFC107</color>
+    <!-- TODO : Declare Styleable -->
+    <declare-styleable name="PlayerController">
+        <attr name="player_scalable" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="PlayerVideo">
+        <attr name="player_rotation" format="boolean" />
+    </declare-styleable>
+    <!-- TODO : Dimensions -->
+    <dimen name="player_margin_small">5.333333333333333dp</dimen>
+    <dimen name="player_margin_medium">10.66666666666667dp</dimen>
+    <dimen name="player_margin_large">16dp</dimen>
+    <dimen name="player_padding_small">5.333333333333333dp</dimen>
+    <dimen name="player_padding_medium">10.66666666666667dp</dimen>
+    <dimen name="player_padding_large">16dp</dimen>
+    <!-- TODO : Strings -->
+    <string name="error" formatted="false" translatable="false">Error</string>
+    <string name="loading" formatted="false" translatable="false">Loading</string>
+    <string name="only_when_playing_the_video" formatted="false" translatable="false">Only when playing the video</string>
+    <string name="time" formatted="false" translatable="false">00:00:00</string>
+    <!-- TODO : Styles-->
+    <style name="PlayerThemeDark" parent="Theme.MaterialComponents.Bridge" />
+
+    <style name="PlayerFontTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/player_light</item>
+        <item name="android:textColorHint">@color/player_hint</item>
+        <item name="fontFamily">@font/product_sans_regular</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="PlayerFontSubhead" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/player_light</item>
+        <item name="android:textColorHint">@color/player_hint</item>
+        <item name="fontFamily">@font/product_sans_regular</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="PlayerFontSmall" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/player_light</item>
+        <item name="android:textColorHint">@color/player_hint</item>
+        <item name="fontFamily">@font/product_sans_regular</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="PlayerFontCaption" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/player_light</item>
+        <item name="android:textColorHint">@color/player_hint</item>
+        <item name="fontFamily">@font/product_sans_regular</item>
+        <item name="textAllCaps">false</item>
+    </style>
+</resources>

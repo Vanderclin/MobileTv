@@ -19,11 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.mobiletv.app.R;
 import com.mobiletv.app.adapter.AdapterCarousel;
+import com.mobiletv.app.adverts.UnityManager;
 import com.mobiletv.app.pojo.Carousel;
 import com.mobiletv.app.widget.CarouselView;
-import com.unity3d.ads.IUnityAdsInitializationListener;
-import com.unity3d.ads.IUnityAdsLoadListener;
-import com.unity3d.ads.IUnityAdsShowListener;
 import com.unity3d.ads.UnityAds;
 
 import java.util.ArrayList;
@@ -31,25 +29,16 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FragmentC extends Fragment {
+public class FragmentC extends Fragment implements UnityManager.UnityInterstitialListener, UnityManager.UnityRewardedListener {
 
-    private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mData;
     private CarouselView carouselView;
     private int currentPage = 0;
-
-    private String UNITY_GAME_ID = "5283279";
-    private final String UNITY_BANNER_ID = "Banner_Android";
-    private final String UNITY_INTERSTITIAL_ID = "Interstitial_Android";
-    private final String UNITY_REWARDED_ID = "Rewarded_Android";
-    private final Boolean UNITY_TEST_MODE = false;
-
-    private ExtendedFloatingActionButton floatingActionButton;
-    private boolean isPermission = true;
+    private UnityManager mUnityManager;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         mData = FirebaseDatabase.getInstance().getReference();
         return inflater.inflate(R.layout.fragment_c, container, false);
@@ -59,13 +48,13 @@ public class FragmentC extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().setTitle(getString(R.string.earn_points));
-        initialize();
+        initializeCarousel();
         initializeUnity();
     }
 
-    private void initialize() {
+    private void initializeCarousel() {
         carouselView = requireActivity().findViewById(R.id.carousel_view);
-        floatingActionButton = requireActivity().findViewById(R.id.earn_points);
+        ExtendedFloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.earn_points);
 
         String[] titles = requireActivity().getResources().getStringArray(R.array.titles);
         String[] descriptions = requireActivity().getResources().getStringArray(R.array.descriptions);
@@ -96,65 +85,11 @@ public class FragmentC extends Fragment {
         }, 1000, 20000);
 
         floatingActionButton.setOnClickListener(v -> {
-            if (isPermission) {
-                initializeUnityRewards();
-                isPermission = false;
+            if (mUnityManager.isRewardedLoaded()) {
+                mUnityManager.showRewardedAd();
             } else {
                 Toast.makeText(requireActivity(), getString(R.string.wait_a_moment), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private void initializeUnity() {
-        UnityAds.initialize(requireActivity(), UNITY_GAME_ID, UNITY_TEST_MODE, new IUnityAdsInitializationListener() {
-            @Override
-            public void onInitializationComplete() {
-                //
-            }
-
-            @Override
-            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
-                //
-            }
-        });
-    }
-
-    public void initializeUnityRewards() {
-        UnityAds.load(UNITY_REWARDED_ID, new IUnityAdsLoadListener() {
-            @Override
-            public void onUnityAdsAdLoaded(String placementId) {
-                UnityAds.show(requireActivity(), placementId, new IUnityAdsShowListener() {
-                    @Override
-                    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
-                        isPermission = true;
-                    }
-
-                    @Override
-                    public void onUnityAdsShowStart(String placementId) {
-                        isPermission = false;
-                    }
-
-                    @Override
-                    public void onUnityAdsShowClick(String placementId) {
-                        isPermission = true;
-                    }
-
-                    @Override
-                    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
-                        isPermission = true;
-                        if (state == UnityAds.UnityAdsShowCompletionState.COMPLETED) {
-                            updatePoints(10);
-                        } else if (state == UnityAds.UnityAdsShowCompletionState.SKIPPED) {
-                            updatePoints(5);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
-                isPermission = true;
+                mUnityManager.initializeUnityRewards();
             }
         });
 
@@ -164,6 +99,61 @@ public class FragmentC extends Fragment {
         if (mUser != null) {
             String uid = mUser.getUid();
             mData.child("users").child(uid).child("points").setValue(ServerValue.increment(points));
+        }
+    }
+
+    private void initializeUnity() {
+        mUnityManager = new UnityManager(requireActivity(), getString(R.string.unity_game_app), getString(R.string.unity_game_banner), getString(R.string.unity_game_interstitial), getString(R.string.unity_game_rewarded), requireActivity().findViewById(R.id.fragment_banner_navigation));
+        mUnityManager.initializeUnity();
+        if (isFragmentAttached()) {
+            mUnityManager.initializeUnityBanner();
+        }
+        mUnityManager.initializeUnityInterstitial();
+        mUnityManager.initializeUnityRewards();
+        mUnityManager.setUnityInterstitialListener(this);
+        mUnityManager.setUnityRewardedListener(this);
+    }
+
+    private boolean isFragmentAttached() {
+        return isAdded() && getActivity() != null;
+    }
+
+    @Override
+    public void onInterstitialShowFailure() {
+
+    }
+
+    @Override
+    public void onInterstitialShowComplete(UnityAds.UnityAdsShowCompletionState state) {
+
+    }
+
+    @Override
+    public void onInterstitialFailedToLoaded() {
+
+    }
+
+    @Override
+    public void onRewardedShowFailure() {
+        if (!mUnityManager.isRewardedLoaded()) {
+            mUnityManager.initializeUnityRewards();
+        }
+    }
+
+    @Override
+    public void onRewardedShowComplete(UnityAds.UnityAdsShowCompletionState state) {
+        mUnityManager.initializeUnityRewards();
+        if (state == UnityAds.UnityAdsShowCompletionState.COMPLETED) {
+            updatePoints(10);
+        } else if (state == UnityAds.UnityAdsShowCompletionState.SKIPPED) {
+            updatePoints(5);
+        }
+    }
+
+    @Override
+    public void onRewardedFailedToLoaded() {
+        if (!mUnityManager.isRewardedLoaded()) {
+            mUnityManager.initializeUnityRewards();
         }
     }
 

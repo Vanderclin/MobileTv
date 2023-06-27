@@ -17,6 +17,11 @@
             android:title="@string/earn_points" />
 
         <item
+            android:id="@+id/navigation_chatbot"
+            android:icon="@drawable/icon_robot"
+            android:title="@string/javabot" />
+
+        <item
             android:id="@+id/navigation_admin"
             android:icon="@drawable/icon_config"
             android:title="@string/administrative"

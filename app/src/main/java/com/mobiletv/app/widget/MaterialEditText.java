@@ -2,6 +2,7 @@ package com.mobiletv.app.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
 
@@ -35,6 +36,18 @@ public class MaterialEditText extends TextInputLayout {
         setHintEnabled(true);
         textInputEditText = new TextInputEditText(getContext());
         addView(textInputEditText);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        // Realize inicializações adicionais aqui, se necessário
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        // Realize a limpeza de recursos aqui, se necessário
     }
 
     private void applyAttributes(AttributeSet attrs) {
@@ -72,5 +85,12 @@ public class MaterialEditText extends TextInputLayout {
 
     public String getText() {
         return String.valueOf(textInputEditText.getText());
+    }
+
+    public void clear() {
+        Editable text = textInputEditText.getText();
+        if (text != null) {
+            text.clear();
+        }
     }
 }

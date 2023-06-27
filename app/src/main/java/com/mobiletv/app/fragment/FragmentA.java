@@ -18,24 +18,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mobiletv.app.R;
 import com.mobiletv.app.adapter.AdapterCarousel;
+import com.mobiletv.app.adverts.UnityManager;
 import com.mobiletv.app.pojo.Carousel;
 import com.mobiletv.app.widget.CarouselView;
-import com.unity3d.ads.IUnityAdsInitializationListener;
 import com.unity3d.ads.UnityAds;
-import com.unity3d.services.banners.IUnityBannerListener;
-import com.unity3d.services.banners.UnityBanners;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FragmentA extends Fragment {
+public class FragmentA extends Fragment implements UnityManager.UnityInterstitialListener, UnityManager.UnityRewardedListener {
 
     private DatabaseReference mData;
     private CarouselView carouselView;
     private int currentPage = 0;
-    private ViewGroup bannerContainer;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_a, container, false);
@@ -52,8 +49,6 @@ public class FragmentA extends Fragment {
 
     private void initializeCarousel() {
         carouselView = requireActivity().findViewById(R.id.carouselView);
-        bannerContainer = requireActivity().findViewById(R.id.fragment_banner_a);
-
         mData.child("carousel").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -87,65 +82,51 @@ public class FragmentA extends Fragment {
         });
     }
 
-    // ADS UNITY
     private void initializeUnity() {
-        UnityAds.initialize(requireActivity(), "5283279", false, new IUnityAdsInitializationListener() {
-            @Override
-            public void onInitializationComplete() {
-                if (isFragmentAttached()) {
-                    initializeUnityBanner();
-                }
-            }
-
-            @Override
-            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
-
-            }
-        });
-    }
-
-    private void initializeUnityBanner() {
-        IUnityBannerListener mBanner = new IUnityBannerListener() {
-            public void onUnityBannerLoaded(String s, View view) {
-                if (isAdded()) {
-                    ViewGroup parent = (ViewGroup) view.getParent();
-                    if (parent != null) {
-                        parent.removeView(view);
-                    }
-                    bannerContainer.addView(view);
-                }
-            }
-
-            @Override
-            public void onUnityBannerUnloaded(String s) {
-
-            }
-
-            @Override
-            public void onUnityBannerShow(String s) {
-
-            }
-
-            @Override
-            public void onUnityBannerClick(String s) {
-
-            }
-
-            @Override
-            public void onUnityBannerHide(String s) {
-
-            }
-
-            @Override
-            public void onUnityBannerError(String s) {
-
-            }
-        };
-        UnityBanners.setBannerListener(mBanner);
-        UnityBanners.loadBanner(requireActivity(), "Banner_Android");
+        UnityManager mUnityManager = new UnityManager(requireActivity(), getString(R.string.unity_game_app), getString(R.string.unity_game_banner), getString(R.string.unity_game_interstitial), getString(R.string.unity_game_rewarded), requireActivity().findViewById(R.id.fragment_banner_navigation));
+        mUnityManager.initializeUnity();
+        if (isFragmentAttached()) {
+            mUnityManager.initializeUnityBanner();
+        }
+        mUnityManager.initializeUnityInterstitial();
+        mUnityManager.initializeUnityRewards();
+        mUnityManager.setUnityInterstitialListener(this);
+        mUnityManager.setUnityRewardedListener(this);
     }
 
     private boolean isFragmentAttached() {
         return isAdded() && getActivity() != null;
     }
+
+
+    @Override
+    public void onInterstitialShowFailure() {
+
+    }
+
+    @Override
+    public void onInterstitialShowComplete(UnityAds.UnityAdsShowCompletionState state) {
+
+    }
+
+    @Override
+    public void onInterstitialFailedToLoaded() {
+
+    }
+
+    @Override
+    public void onRewardedShowFailure() {
+
+    }
+
+    @Override
+    public void onRewardedShowComplete(UnityAds.UnityAdsShowCompletionState state) {
+
+    }
+
+    @Override
+    public void onRewardedFailedToLoaded() {
+
+    }
+
 }

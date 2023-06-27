@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -38,16 +36,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.mobiletv.app.R;
+import com.mobiletv.app.adverts.UnityManager;
 import com.mobiletv.app.fragment.FragmentA;
 import com.mobiletv.app.fragment.FragmentB;
 import com.mobiletv.app.fragment.FragmentC;
+import com.mobiletv.app.fragment.FragmentChatbot;
 import com.mobiletv.app.pojo.AccountData;
 import com.mobiletv.app.widget.Badge;
 import com.mobiletv.app.widget.MaterialEditText;
 import com.mobiletv.app.update.UpdateChecker;
-import com.unity3d.ads.IUnityAdsInitializationListener;
-import com.unity3d.ads.IUnityAdsLoadListener;
-import com.unity3d.ads.IUnityAdsShowListener;
 import com.unity3d.ads.UnityAds;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,12 +53,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private AppCompatTextView NavHeaderName, NavHeaderVersion;
-    private AppCompatImageView NavHeaderSignOut;
     private Fragment mFragment;
     private int mFragmentSelected = -1;
     private MenuItem menuItem;
     private AccountData accountData;
     private View navigationViewHeader;
+
+    private AppCompatImageView NavBottomSignOut;
 
     private DatabaseReference mData;
     private FirebaseAuth mAuth;
@@ -79,10 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initializeConnection();
         initializeFindViews();
         initializeFirebase();
-        initializeUnity();
     }
 
     private void initializeFindViews() {
@@ -94,14 +90,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         navigationViewHeader = mNavigationView.getHeaderView(0);
+
         NavHeaderName = navigationViewHeader.findViewById(R.id.nav_header_name);
         NavHeaderName.setSelected(true);
+
+
         NavHeaderPoints = navigationViewHeader.findViewById(R.id.nav_header_points);
         NavHeaderVersion = findViewById(R.id.nav_footer_version);
-        NavHeaderSignOut = findViewById(R.id.nav_footer_sign_out);
+
+        NavBottomSignOut = findViewById(R.id.nav_footer_sign_out);
+
         mNavigationView.setNavigationItemSelectedListener(this);
-        setFragmentScreen(R.id.navigation_a);
+        setFragmentScreen(R.id.navigation_b);
         menuItem = mNavigationView.getMenu().findItem(R.id.navigation_admin);
+        UpdateChecker.checkForDialog(MainActivity.this);
     }
 
     private void initializeFirebase() {
@@ -131,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initializeViews(AccountData mAccountData) {
+
+
         String username = mAccountData.getName();
         String points = String.valueOf(mAccountData.getPoints());
         NavHeaderName.setText(username);
@@ -138,13 +142,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (TextUtils.isEmpty(username)) {
             openDialogUpdate();
         }
-        menuItem.setVisible(mAccountData.getAdmin());
+        menuItem.setVisible(mAccountData.isAdmin());
 
 
         if (navigationViewHeader != null && getVersion() != null) {
             NavHeaderVersion.setText(getVersion());
         }
-        NavHeaderSignOut.setOnClickListener(v -> {
+        NavBottomSignOut.setOnClickListener(v -> {
             mDrawerLayout.closeDrawer(GravityCompat.START);
             MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(MainActivity.this, R.style.MaterialDialog);
             mBuilder.setTitle(getString(R.string.sign_out));
@@ -210,14 +214,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void initializeConnection() {
-        ConnectivityManager cm = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            UpdateChecker.checkForDialog(MainActivity.this);
-        }
-    }
-
     @SuppressLint("NonConstantResourceId")
     private void setFragmentScreen(int itemId) {
         if (mFragmentSelected == itemId) {
@@ -234,8 +230,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.navigation_c:
                 mFragment = new FragmentC();
                 break;
+            case R.id.navigation_chatbot:
+                mFragment = new FragmentChatbot();
+                break;
             case R.id.navigation_admin:
-                startActivity(new Intent(MainActivity.this, FormActivity.class));
+                startActivity(new Intent(MainActivity.this, PublishActivity.class));
                 break;
         }
         if (mFragment != null) {
@@ -248,62 +247,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    // ADS UNITY
-    private void initializeUnity() {
-        UnityAds.initialize(MainActivity.this, "5283279", false, new IUnityAdsInitializationListener() {
-            @Override
-            public void onInitializationComplete() {
-                // initializeUnityBanner();
-            }
-
-            @Override
-            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
-                // Handle Unity Ads initialization error
-            }
-        });
-    }
-
-    public void initializeUnityInterstitial() {
-        UnityAds.load("Interstitial_Android", new IUnityAdsLoadListener() {
-            @Override
-            public void onUnityAdsAdLoaded(String placementId) {
-                UnityAds.show(MainActivity.this, placementId, new IUnityAdsShowListener() {
-                    @Override
-                    public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
-                        // Handle Unity Ads show failure
-                    }
-
-                    @Override
-                    public void onUnityAdsShowStart(String placementId) {
-                        // Handle Unity Ads show start
-                    }
-
-                    @Override
-                    public void onUnityAdsShowClick(String placementId) {
-                        // Handle Unity Ads show click
-                    }
-
-                    @Override
-                    public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
-                        // Handle Unity Ads show complete
-                    }
-                });
-            }
-
-            @Override
-            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
-                // Handle Unity Ads load failure
-            }
-        });
-    }
-
     private void initializeInterstitial() {
         SharedPreferences sharedPreferences = getSharedPreferences("ads", Context.MODE_PRIVATE);
         long lastAdTime = sharedPreferences.getLong("last_ad_time", 0);
         long currentTime = System.currentTimeMillis();
         long thirtyMinutesInMillis = 30 * 60 * 1000;
         if (currentTime - lastAdTime >= thirtyMinutesInMillis) {
-            initializeUnityInterstitial();
+            //
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("last_ad_time", currentTime);
             editor.apply();

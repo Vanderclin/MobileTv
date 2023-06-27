@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mobiletv.app.R;
+import com.mobiletv.app.pojo.AccountData;
+import com.mobiletv.app.update.UpdateChecker;
 
 import java.util.HashMap;
 
@@ -62,15 +64,8 @@ public class SignUpActivity extends AppCompatActivity {
                     if (taskOne.isSuccessful()) {
                         if (mAuth.getCurrentUser() != null) {
                             String uid = mAuth.getCurrentUser().getUid();
-                            HashMap<String, Object> account = new HashMap<>();
-                            account.put("access", getTimestamp());
-                            account.put("admin", false);
-                            account.put("device", getDevice());
-                            account.put("email", email);
-                            account.put("name", "");
-                            account.put("points", 1500);
-                            account.put("uid", uid);
-                            mData.child("users").child(uid).setValue(account).addOnCompleteListener(taskTwo -> {
+                            AccountData accountData = new AccountData(getTimestamp(), false, getDevice(), email, false, "", 1500, getTimestamp(), uid);
+                            mData.child("users").child(uid).setValue(accountData).addOnCompleteListener(taskTwo -> {
                                 if (taskTwo.isSuccessful()) {
                                     initializationFirebase();
                                 }
