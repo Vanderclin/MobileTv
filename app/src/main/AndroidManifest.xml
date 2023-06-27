@@ -163,6 +163,19 @@
             android:name="com.mobiletv.app.update.DownloadService"
             android:exported="false" />
 
+
+        <provider
+            android:name=".update.UpdateFileProvider"
+            android:authorities="com.mobiletv.app.update.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+
+        </provider>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.mobiletv.app.fileprovider"

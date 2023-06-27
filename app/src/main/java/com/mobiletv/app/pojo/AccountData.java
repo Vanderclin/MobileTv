@@ -1,5 +1,11 @@
 package com.mobiletv.app.pojo;
 
+import androidx.annotation.Keep;
+
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@Keep
+@IgnoreExtraProperties
 public class AccountData {
 
     private long access;
@@ -32,7 +38,9 @@ public class AccountData {
         return access;
     }
 
-    public boolean isAdmin() { return admin; }
+    public boolean isAdmin() {
+        return admin;
+    }
 
     public String getDevice() {
         return device;
@@ -42,7 +50,9 @@ public class AccountData {
         return email;
     }
 
-    public boolean isMember() { return member; }
+    public boolean isMember() {
+        return member;
+    }
 
     public String getName() {
         return name;
